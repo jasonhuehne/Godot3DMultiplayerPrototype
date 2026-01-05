@@ -1,0 +1,85 @@
+[gd_scene load_steps=11 format=3 uid="uid://bl0wx6gnt5d6n"]
+
+[ext_resource type="Script" uid="uid://b43shnt5y151p" path="res://scripts/enemy.gd" id="1_b6abq"]
+[ext_resource type="PackedScene" uid="uid://dri6cgkssj30u" path="res://assets/characters/enemy/enemy.tscn" id="2_55jtl"]
+[ext_resource type="Script" uid="uid://bhbspob3tdjx8" path="res://scripts/state_machine.gd" id="3_mpr68"]
+[ext_resource type="Script" uid="uid://cbgree8tm6qap" path="res://scripts/EnemyIdle.gd" id="4_ft8do"]
+[ext_resource type="Script" uid="uid://n2mvibf6hqfn" path="res://scripts/EnemyMove.gd" id="5_5wwv6"]
+[ext_resource type="Script" uid="uid://cdnd7i7tvy0m4" path="res://scripts/EnemyJumpAttack.gd" id="6_1vja8"]
+[ext_resource type="Script" uid="uid://c5441rw14ths2" path="res://scenes/level/multiplayer_synchronizer.gd" id="7_kvuuh"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mpr68"]
+size = Vector3(2.1293106, 3.1853838, 2.315239)
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_knc8i"]
+properties/0/path = NodePath("enemy:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("Pivot:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:HEALTH")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_kvuuh"]
+radius = 9.18457
+
+[node name="enemy" type="CharacterBody3D" groups=["enemies"]]
+script = ExtResource("1_b6abq")
+
+[node name="Pivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0017257333, 0)
+
+[node name="Character" parent="Pivot" instance=ExtResource("2_55jtl")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05511856, 1.609137, -0.1202507)
+shape = SubResource("BoxShape3D_mpr68")
+
+[node name="hitbox" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5869322, -0.16803896)
+target_position = Vector3(0, 0, -3.33)
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+
+[node name="State Machine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("3_mpr68")
+initial_state = NodePath("EnemyIdle")
+
+[node name="EnemyIdle" type="Node" parent="State Machine"]
+script = ExtResource("4_ft8do")
+metadata/_custom_type_script = "uid://cbgree8tm6qap"
+
+[node name="EnemyMove" type="Node" parent="State Machine"]
+script = ExtResource("5_5wwv6")
+metadata/_custom_type_script = "uid://n2mvibf6hqfn"
+
+[node name="IdleTimer" type="Timer" parent="State Machine/EnemyMove"]
+wait_time = 2.0
+one_shot = true
+
+[node name="EnemyJumpAttack" type="Node" parent="State Machine"]
+script = ExtResource("6_1vja8")
+metadata/_custom_type_script = "uid://cdnd7i7tvy0m4"
+
+[node name="Jump" type="Timer" parent="State Machine/EnemyJumpAttack"]
+one_shot = true
+
+[node name="Ground" type="Timer" parent="State Machine/EnemyJumpAttack"]
+one_shot = true
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_knc8i")
+script = ExtResource("7_kvuuh")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("CylinderShape3D_kvuuh")
+
+[connection signal="timeout" from="State Machine/EnemyMove/IdleTimer" to="State Machine/EnemyMove" method="_on_timer_timeout"]
+[connection signal="timeout" from="State Machine/EnemyJumpAttack/Jump" to="State Machine/EnemyJumpAttack" method="_on_jump_timeout"]
+[connection signal="timeout" from="State Machine/EnemyJumpAttack/Ground" to="State Machine/EnemyJumpAttack" method="_on_ground_timeout"]
+[connection signal="body_entered" from="Area3D" to="MultiplayerSynchronizer" method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="Area3D" to="MultiplayerSynchronizer" method="_on_area_3d_body_exited"]

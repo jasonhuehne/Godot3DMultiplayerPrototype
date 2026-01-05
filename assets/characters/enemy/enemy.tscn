@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://dri6cgkssj30u"]
+
+[ext_resource type="PackedScene" uid="uid://bltkkfpfuplrd" path="res://assets/model/Character.glb" id="1_mjumc"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mjumc"]
+albedo_color = Color(1, 0.13333334, 0.12156863, 1)
+
+[node name="Character" instance=ExtResource("1_mjumc")]
+
+[node name="Cone" parent="." index="0"]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
+surface_material_override/0 = SubResource("StandardMaterial3D_mjumc")
+
+[node name="Cube" parent="." index="1"]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)

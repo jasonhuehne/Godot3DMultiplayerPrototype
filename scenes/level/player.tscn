@@ -1,0 +1,582 @@
+[gd_scene load_steps=51 format=3 uid="uid://u2f1js3kjrdi"]
+
+[ext_resource type="Script" uid="uid://c2si8gkbnde0c" path="res://scripts/player.gd" id="1_cw2d6"]
+[ext_resource type="Texture2D" uid="uid://draxnnsydk6vo" path="res://test.tres" id="2_rtsbg"]
+[ext_resource type="ArrayMesh" uid="uid://cvyxyp5gg6qjb" path="res://assets/model/Character.obj" id="2_v6fml"]
+[ext_resource type="ArrayMesh" uid="uid://dqkfb46efxgq" path="res://assets/Sword.tres" id="3_2l1sl"]
+[ext_resource type="Script" uid="uid://bhbspob3tdjx8" path="res://scripts/state_machine.gd" id="3_mdl7e"]
+[ext_resource type="Script" uid="uid://cab4nel67t3ag" path="res://scripts/PlayerIdle.gd" id="4_70d11"]
+[ext_resource type="Script" uid="uid://cbwmsgwmai3q5" path="res://scripts/PlayerMove.gd" id="5_cw2d6"]
+[ext_resource type="Script" uid="uid://b3ufb16j8yxne" path="res://scripts/PlayerKnockback.gd" id="6_khinc"]
+[ext_resource type="Script" uid="uid://4uaytkvbkre" path="res://scripts/PlayerDash.gd" id="7_cw2d6"]
+[ext_resource type="Script" uid="uid://b17atnpgnwsg3" path="res://scripts/PlayerAttack.gd" id="9_pnmcy"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rtsbg"]
+radius = 0.6538086
+height = 2.1224976
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_pnmcy"]
+radius = 0.08691406
+height = 1.5292969
+
+[sub_resource type="Curve" id="Curve_pnmcy"]
+_data = [Vector2(0, 0.06848228), 0.0, 0.29801086, 0, 0, Vector2(0.501462, 0.2747224), 0.20832896, 0.20832896, 0, 0, Vector2(1, 0.48439986), 0.8177869, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_pe35h"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("Head:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("MeshInstance3D:rotation")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
+[sub_resource type="Animation" id="Animation_d2uvk"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Head/WeaponManager/Weapon:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.6736971, -0.48171094, -0.13089973)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Head/WeaponManager/Weapon:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.7016195, -0.16426909, -0.8436563)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Head/WeaponManager/Weapon/Hitbox:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Head/WeaponManager/Weapon/Mesh:mesh:surface_0/material:albedo_color")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("MeshInstance3D:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-2.0262385e-10, 0, 2.3283064e-10)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("MeshInstance3D:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_rtsbg"]
+resource_name = "attack"
+length = 0.78
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Head/WeaponManager/Weapon:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.007352501, 0.26666668, 0.73333335),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.46883863, -0.69647706, -0.5234177), Vector3(-1.337064, -0.13072927, 0.95027095), Vector3(-0.6736971, -0.48171094, -0.13089973)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Head/WeaponManager/Weapon:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.007352501, 0.26666668, 0.73333335),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0.83, 0, -0.625), Vector3(-0.6547171, -0.37294257, -1.6856903), Vector3(0.7016195, -0.16426909, -0.8436563)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Head/WeaponManager/Weapon/Hitbox:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.26666668, 0.73333335),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Head/WeaponManager/Weapon/Mesh:mesh:surface_0/material:albedo_color")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_pnmcy"]
+resource_name = "charge"
+length = 1.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Head/WeaponManager/Weapon:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.27401918, 0.6576213, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.6736971, -0.48171094, -0.13089973), Vector3(-0.46883863, -0.69647706, -0.5234177), Vector3(-0.5184512, -0.66345894, -0.60228676), Vector3(-0.46883863, -0.69647706, -0.5234177)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Head/WeaponManager/Weapon:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.27401918),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.7016195, -0.16426909, -0.8436563), Vector3(0.83, 0, -0.625)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Head/WeaponManager/Weapon/Mesh:mesh:surface_0/material:albedo_color")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_jn51r"]
+resource_name = "charged"
+length = 1.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Head/WeaponManager/Weapon:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.33333334, 0.6666667, 1.1333333, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.46883863, -0.69647706, -0.5234177), Vector3(-0.5184512, -0.66345894, -0.60228676), Vector3(-0.46883863, -0.69647706, -0.5234177), Vector3(-0.5184512, -0.66345894, -0.60228676), Vector3(-0.46883863, -0.69647706, -0.5234177)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Head/WeaponManager/Weapon:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.33333334, 1.1333333, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0.83, 0, -0.625), Vector3(0.8749853, 0.10538769, -0.52781814), Vector3(0.8749853, 0.10538769, -0.52781814), Vector3(0.83, 0, -0.625)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Head/WeaponManager/Weapon/Mesh:mesh:surface_0/material:albedo_color")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.46666667, 0.8, 1.2, 1.5),
+"transitions": PackedFloat32Array(1, 0.55478466, 3.1383386, 2.1435478, 2.5491261),
+"update": 0,
+"values": [Color(1.4687854, 1.4687854, 1.4687854, 1), Color(1.523, 1.523, 1.523, 1), Color(1.523, 1.523, 1.523, 1), Color(1.523, 1.523, 1.523, 1), Color(1.469, 1.469, 1.469, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_a6urh"]
+resource_name = "dash"
+length = 0.78
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.6),
+"transitions": PackedFloat32Array(1.3660508, 1, 1.000008),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0.61, 0), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MeshInstance3D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.01333335, 0.2, 0.46666667, 0.76666665),
+"transitions": PackedFloat32Array(1, 0.46651652, 1.6817931, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(1, 0.9, 1), Vector3(1.048, 1.1, 1.048), Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_hbshb"]
+resource_name = "idle"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2),
+"transitions": PackedFloat32Array(1.5691686, 0.9012512, 0.59460425),
+"update": 0,
+"values": [Vector3(-2.0262385e-10, 0, 2.3283064e-10), Vector3(0, 0.02, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_bkbtv"]
+resource_name = "walking"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.46666667, 1),
+"transitions": PackedFloat32Array(1.2745613, 1.681794, 0.5547855),
+"update": 0,
+"values": [Vector3(-2.0262385e-10, 0, 2.3283064e-10), Vector3(-2.0262385e-10, 0.087111354, 2.3283064e-10), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_xgf8p"]
+resource_name = "knockback"
+length = 0.33
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.21, 0.32),
+"transitions": PackedFloat32Array(1, 0.46651652, 1, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(1, 0.9, 1), Vector3(1, 1.05, 1), Vector3(1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jn51r"]
+_data = {
+&"RESET": SubResource("Animation_d2uvk"),
+&"attack": SubResource("Animation_rtsbg"),
+&"charge": SubResource("Animation_pnmcy"),
+&"charged": SubResource("Animation_jn51r"),
+&"dash": SubResource("Animation_a6urh"),
+&"idle": SubResource("Animation_hbshb"),
+&"knockback": SubResource("Animation_xgf8p"),
+&"walking": SubResource("Animation_bkbtv")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_rtsbg"]
+resource_local_to_scene = true
+animation = &"attack"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_d2uvk"]
+resource_local_to_scene = true
+animation = &"charge"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jn51r"]
+resource_local_to_scene = true
+animation = &"charged"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_a6urh"]
+animation = &"dash"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_hbshb"]
+resource_local_to_scene = true
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_xgf8p"]
+animation = &"knockback"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_bkbtv"]
+resource_local_to_scene = true
+animation = &"walking"
+advance_on_start = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_a6urh"]
+advance_mode = 2
+advance_condition = &"charging"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xgf8p"]
+switch_mode = 1
+advance_mode = 2
+advance_condition = &"charged"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_wj53m"]
+advance_mode = 2
+advance_condition = &"attacking"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_hbshb"]
+reset = false
+advance_mode = 0
+advance_condition = &"charging"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ypepm"]
+switch_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_n3wk0"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_lm846"]
+xfade_time = 0.1
+switch_mode = 1
+advance_mode = 2
+advance_condition = &"is_moving"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_mswon"]
+xfade_time = 0.1
+switch_mode = 1
+advance_mode = 2
+advance_condition = &"is_not_moving"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_454a0"]
+advance_mode = 2
+advance_condition = &"dashing"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_0potc"]
+advance_mode = 2
+advance_condition = &"dashing"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_fesw4"]
+xfade_time = 0.22
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_qce6l"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_bfcyu"]
+switch_mode = 1
+advance_mode = 2
+advance_condition = &"hit"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_4xdeo"]
+switch_mode = 1
+advance_mode = 2
+advance_condition = &"hit"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_qhbr1"]
+xfade_time = 0.1
+advance_mode = 2
+advance_condition = &"hit"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_60h7d"]
+xfade_time = 0.1
+advance_mode = 2
+advance_condition = &"hit"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_jpdyr"]
+switch_mode = 1
+advance_mode = 2
+advance_condition = &"hit"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_c6b0m"]
+advance_mode = 2
+advance_condition = &"knockbackEnd"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_jwk5v"]
+advance_mode = 2
+advance_condition = &"knockbackEnd"
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_lm846"]
+states/Start/position = Vector2(88, 69)
+states/attack/node = SubResource("AnimationNodeAnimation_rtsbg")
+states/attack/position = Vector2(548, -12)
+states/charge/node = SubResource("AnimationNodeAnimation_d2uvk")
+states/charge/position = Vector2(468, 115)
+states/charged/node = SubResource("AnimationNodeAnimation_jn51r")
+states/charged/position = Vector2(554, 201)
+states/dash/node = SubResource("AnimationNodeAnimation_a6urh")
+states/dash/position = Vector2(252, 233)
+states/idle/node = SubResource("AnimationNodeAnimation_hbshb")
+states/idle/position = Vector2(162, 123)
+states/knockback/node = SubResource("AnimationNodeAnimation_xgf8p")
+states/knockback/position = Vector2(414, 338)
+states/walking/node = SubResource("AnimationNodeAnimation_bkbtv")
+states/walking/position = Vector2(306, 115)
+transitions = ["charge", "attack", SubResource("AnimationNodeStateMachineTransition_a6urh"), "charge", "charged", SubResource("AnimationNodeStateMachineTransition_xgf8p"), "charged", "attack", SubResource("AnimationNodeStateMachineTransition_wj53m"), "walking", "charge", SubResource("AnimationNodeStateMachineTransition_hbshb"), "attack", "walking", SubResource("AnimationNodeStateMachineTransition_ypepm"), "Start", "idle", SubResource("AnimationNodeStateMachineTransition_n3wk0"), "idle", "walking", SubResource("AnimationNodeStateMachineTransition_lm846"), "walking", "idle", SubResource("AnimationNodeStateMachineTransition_mswon"), "walking", "dash", SubResource("AnimationNodeStateMachineTransition_454a0"), "idle", "dash", SubResource("AnimationNodeStateMachineTransition_0potc"), "dash", "walking", SubResource("AnimationNodeStateMachineTransition_fesw4"), "dash", "idle", SubResource("AnimationNodeStateMachineTransition_qce6l"), "walking", "knockback", SubResource("AnimationNodeStateMachineTransition_bfcyu"), "idle", "knockback", SubResource("AnimationNodeStateMachineTransition_4xdeo"), "charged", "knockback", SubResource("AnimationNodeStateMachineTransition_qhbr1"), "charge", "knockback", SubResource("AnimationNodeStateMachineTransition_60h7d"), "attack", "knockback", SubResource("AnimationNodeStateMachineTransition_jpdyr"), "knockback", "walking", SubResource("AnimationNodeStateMachineTransition_c6b0m"), "knockback", "idle", SubResource("AnimationNodeStateMachineTransition_jwk5v")]
+graph_offset = Vector2(15, -105)
+
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("_body") groups=["player"]]
+collision_layer = 7
+collision_mask = 5
+script = ExtResource("1_cw2d6")
+_body = NodePath(".")
+blue_texture = ExtResource("2_rtsbg")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, -1.7484555e-07, 0, 1, 0, 1.7484555e-07, 0, 1, -2.0262385e-10, 0, 2.3283064e-10)
+mesh = ExtResource("2_v6fml")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, -1.7484555e-07, 0, 1, 0, 1.7484555e-07, 0, 1, 0, 1.0911145, 0)
+shape = SubResource("CapsuleShape3D_rtsbg")
+
+[node name="Head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, -1.7484555e-07, 0, 1, 0, 1.7484555e-07, 0, 1, -2.0262385e-10, 1.647, 2.3283064e-10)
+
+[node name="Camera3D" type="Node3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 0.9999999, 0, 0, 0, 0.9999999, -4.235256e-07, -0.3731779, 0.03294444)
+
+[node name="Camera3D" type="Camera3D" parent="Head/Camera3D"]
+transform = Transform3D(1, -1.7763568e-15, 0, 1.7763568e-15, 0.99999994, 0, 0, 0, 0.99999994, 5.073659e-07, 1.0674492, 2.9017944)
+fov = 80.8
+near = 0.073
+
+[node name="WeaponManager" type="Node3D" parent="Head"]
+
+[node name="Weapon" type="Node3D" parent="Head/WeaponManager"]
+transform = Transform3D(0.8786217, 0.115672834, -0.4632962, 0.18455921, 0.8125621, 0.55288446, 0.44041032, -0.571282, 0.69258636, 0.7016195, -0.16426909, -0.8436563)
+rotation_order = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Head/WeaponManager/Weapon"]
+mesh = ExtResource("3_2l1sl")
+
+[node name="Hitbox" type="Area3D" parent="Head/WeaponManager/Weapon"]
+transform = Transform3D(1, 0, -2.9802322e-08, 0, 1, 2.9802322e-08, 0, -2.9802322e-08, 1, 0, 0, 0)
+monitoring = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Head/WeaponManager/Weapon/Hitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.0000051, 0, 0.67214847, 0)
+shape = SubResource("CapsuleShape3D_pnmcy")
+
+[node name="cooldown" type="Timer" parent="."]
+one_shot = true
+
+[node name="State Machine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("3_mdl7e")
+initial_state = NodePath("PlayerIdle")
+
+[node name="PlayerIdle" type="Node" parent="State Machine"]
+script = ExtResource("4_70d11")
+
+[node name="PlayerKnockback" type="Node" parent="State Machine"]
+script = ExtResource("6_khinc")
+
+[node name="PlayerMove" type="Node" parent="State Machine"]
+script = ExtResource("5_cw2d6")
+
+[node name="PlayerDash" type="Node" parent="State Machine"]
+script = ExtResource("7_cw2d6")
+
+[node name="PlayerAttack" type="Node" parent="State Machine"]
+script = ExtResource("9_pnmcy")
+damage_curve = SubResource("Curve_pnmcy")
+metadata/_custom_type_script = "uid://b17atnpgnwsg3"
+
+[node name="ChargeTime" type="Timer" parent="State Machine"]
+wait_time = 1.5
+one_shot = true
+
+[node name="DashTimeout" type="Timer" parent="State Machine"]
+wait_time = 0.78
+one_shot = true
+
+[node name="AttackTimeout" type="Timer" parent="State Machine"]
+
+[node name="StunTime" type="Timer" parent="State Machine"]
+wait_time = 0.33
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_pe35h")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_jn51r")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+root_motion_local = true
+tree_root = SubResource("AnimationNodeStateMachine_lm846")
+anim_player = NodePath("../AnimationPlayer")
+parameters/conditions/attacking = false
+parameters/conditions/charged = false
+parameters/conditions/charging = false
+parameters/conditions/dashing = false
+parameters/conditions/hit = false
+parameters/conditions/is_moving = false
+parameters/conditions/is_not_moving = false
+parameters/conditions/knockbackEnd = false
+
+[node name="PlayerNick" type="Node3D" parent="."]
+transform = Transform3D(1, 0, -1.7484555e-07, 0, 1, 0, 1.7484555e-07, 0, 1, 0, 2.6973486, 1.3877788e-17)
+
+[node name="Nickname" type="Label3D" parent="PlayerNick"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.28502512, 0)
+text = "test_name"
+
+[connection signal="body_entered" from="Head/WeaponManager/Weapon/Hitbox" to="State Machine/PlayerAttack" method="_on_hitbox_body_entered"]
+[connection signal="timeout" from="State Machine/ChargeTime" to="." method="_on_attack_timeout_timeout"]
+[connection signal="timeout" from="State Machine/DashTimeout" to="." method="_on_dash_timeout_timeout"]
+[connection signal="timeout" from="State Machine/AttackTimeout" to="." method="_on_attack_timeout_timeout"]
+[connection signal="timeout" from="State Machine/StunTime" to="State Machine/PlayerKnockback" method="_on_stun_time_timeout"]
+[connection signal="synchronized" from="MultiplayerSynchronizer" to="." method="_on_multiplayer_synchronizer_synchronized"]
+[connection signal="animation_finished" from="AnimationTree" to="State Machine/PlayerKnockback" method="_on_animation_tree_animation_finished"]
+[connection signal="animation_finished" from="AnimationTree" to="State Machine/PlayerDash" method="_on_animation_tree_animation_finished"]
+[connection signal="animation_finished" from="AnimationTree" to="State Machine/PlayerAttack" method="_on_animation_tree_animation_finished"]

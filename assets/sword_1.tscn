@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://b6ji4ixaaojep"]
+
+[ext_resource type="PackedScene" uid="uid://dsh0aw0f5o7gn" path="res://assets/model/sword1.glb" id="1_wc0lb"]
+[ext_resource type="ArrayMesh" uid="uid://dqkfb46efxgq" path="res://assets/Sword.tres" id="2_khdxp"]
+
+[node name="sword1" instance=ExtResource("1_wc0lb")]
+
+[node name="Sphere" parent="." index="0"]
+mesh = ExtResource("2_khdxp")

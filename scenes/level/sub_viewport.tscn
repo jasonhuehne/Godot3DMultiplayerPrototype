@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://c2sqtgmg7kfx0"]
+
+[ext_resource type="PackedScene" uid="uid://vuulltwdylep" path="res://healthbar_3d.tscn" id="1_eihfq"]
+
+[node name="SubViewport" type="SubViewport"]
+disable_3d = true
+transparent_bg = true
+
+[node name="Healthbar3D" parent="." instance=ExtResource("1_eihfq")]

@@ -1,0 +1,124 @@
+[gd_scene load_steps=15 format=3 uid="uid://dugaivbj1o66n"]
+
+[ext_resource type="Script" uid="uid://d0dgljwwl463n" path="res://scripts/level.gd" id="1_e1sh7"]
+[ext_resource type="PackedScene" uid="uid://u2f1js3kjrdi" path="res://scenes/level/player.tscn" id="2_hnne4"]
+[ext_resource type="PackedScene" uid="uid://bclq8vh1x2goy" path="res://scenes/ui/inventory_ui.tscn" id="4_x8g2h"]
+[ext_resource type="PackedScene" uid="uid://ccencq0lcd3ph" path="res://scenes/ui/multiplayer_chat_ui.tscn" id="5_x9g3h"]
+[ext_resource type="Texture2D" uid="uid://d0shx1mlvc2go" path="res://kenney_prototype-textures/Vector/texture_02.svg" id="6_vpf64"]
+[ext_resource type="PackedScene" uid="uid://bx7mq8t8hjn7q" path="res://scenes/ui/main_menu_ui.tscn" id="6_x9g3h"]
+[ext_resource type="PackedScene" uid="uid://dbp8s2jp4eghj" path="res://player_healthbar.tscn" id="6_xv074"]
+
+[sub_resource type="Environment" id="Environment_qb4jd"]
+fog_enabled = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tf2q7"]
+resource_local_to_scene = true
+bg_color = Color(0.48391157, 0.6600916, 0.3845351, 1)
+border_color = Color(0.39985, 0.55, 0.31900004, 1)
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_hnne4"]
+vertices = PackedVector3Array(-15.021088, -0.9676533, -17.89975, -15.021088, -0.9676533, 11.10025, 13.978912, -0.9676533, 11.10025, 13.978912, -0.9676533, -17.89975)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hnne4"]
+albedo_texture = ExtResource("6_vpf64")
+uv1_scale = Vector3(4, 4, 4)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_hnne4"]
+top_radius = 0.0
+bottom_radius = 0.1
+height = 1.0
+radial_segments = 4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vpf64"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wcngd"]
+content_margin_left = 6.0
+bg_color = Color(0, 0, 0, 0.3764706)
+
+[node name="Level" type="Node3D"]
+script = ExtResource("1_e1sh7")
+player_scene = ExtResource("2_hnne4")
+
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
+environment = SubResource("Environment_qb4jd")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, -0.5, 0.866025, 0, -0.866025, -0.5, 0, 4, 0)
+shadow_enabled = true
+shadow_blur = 0.5
+
+[node name="PlayersContainer" type="Node3D" parent="."]
+
+[node name="MainMenuUI" parent="." instance=ExtResource("6_x9g3h")]
+visible = false
+
+[node name="MultiplayerChatUI" parent="." instance=ExtResource("5_x9g3h")]
+visible = false
+
+[node name="InventoryUI" parent="." instance=ExtResource("4_x8g2h")]
+visible = false
+
+[node name="HealthBar" parent="." instance=ExtResource("6_xv074")]
+visible = false
+theme_override_styles/fill = SubResource("StyleBoxFlat_tf2q7")
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2081795, 0)
+navigation_mesh = SubResource("NavigationMesh_hnne4")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.52108765, -1.9676533, -3.3997498)
+use_collision = true
+collision_layer = 4
+collision_mask = 4
+size = Vector3(30, 1, 30)
+material = SubResource("StandardMaterial3D_hnne4")
+
+[node name="Waypoints" type="Node" parent="."]
+
+[node name="WaypointMarker" type="MeshInstance3D" parent="Waypoints"]
+transform = Transform3D(1, 1.5285484e-14, 1.7484555e-07, 0, -1, 8.742278e-08, 1.7484555e-07, -8.742278e-08, -1, 8.027708, 0.44203854, 5.191062)
+layers = 0
+mesh = SubResource("CylinderMesh_hnne4")
+surface_material_override/0 = SubResource("StandardMaterial3D_vpf64")
+
+[node name="WaypointMarker2" type="MeshInstance3D" parent="Waypoints"]
+transform = Transform3D(1, 1.5285484e-14, 1.7484555e-07, 0, -1, 8.742278e-08, 1.7484555e-07, -8.742278e-08, -1, -9.021093, 0.44203854, 5.1036997)
+layers = 0
+mesh = SubResource("CylinderMesh_hnne4")
+surface_material_override/0 = SubResource("StandardMaterial3D_vpf64")
+
+[node name="WaypointMarker3" type="MeshInstance3D" parent="Waypoints"]
+transform = Transform3D(1, 1.5285484e-14, 1.7484555e-07, 0, -1, 8.742278e-08, 1.7484555e-07, -8.742278e-08, -1, -8.972204, 0.44203854, -11.707095)
+layers = 0
+mesh = SubResource("CylinderMesh_hnne4")
+surface_material_override/0 = SubResource("StandardMaterial3D_vpf64")
+
+[node name="WaypointMarker4" type="MeshInstance3D" parent="Waypoints"]
+transform = Transform3D(1, 1.5285484e-14, 1.7484555e-07, 0, -1, 8.742278e-08, 1.7484555e-07, -8.742278e-08, -1, 8.057324, 0.44203854, -11.771656)
+layers = 0
+mesh = SubResource("CylinderMesh_hnne4")
+surface_material_override/0 = SubResource("StandardMaterial3D_vpf64")
+
+[node name="Mobs" type="Node3D" parent="."]
+
+[node name="MobSpawner" type="MultiplayerSpawner" parent="Mobs"]
+_spawnable_scenes = PackedStringArray("uid://bl0wx6gnt5d6n")
+spawn_path = NodePath("..")
+spawn_limit = 3
+
+[node name="Currency" type="Label" parent="."]
+visible = false
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -239.0
+offset_top = 14.0
+offset_bottom = 38.0
+grow_horizontal = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_wcngd")
+text = "0000"
