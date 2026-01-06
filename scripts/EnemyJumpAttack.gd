@@ -5,10 +5,10 @@ var waited = false
 func enter():
 	print_debug(self)
 	waited = false
-	enemy.set_collision_layer_value(1, false)
+	enemy.set_collision_mask_value(1, false)
 	enemy.jumpAttackTimeout.start()
 func exit():
-	enemy.set_collision_layer_value(1, true)
+	enemy.set_collision_mask_value(1, true)
 	waited = false
 func physics_update(delta: float) -> void:
 	if not waited:

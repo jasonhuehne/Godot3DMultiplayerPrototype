@@ -81,7 +81,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if stateMachine.currentState.name == "PlayerMove":
 		if Input.is_action_just_pressed("attack") and can_attack:
-			stateMachine.transition_to("PlayerAttack")
+			stateMachine.transition_to("PlayerCharge")
 			return
 		if Input.is_action_just_pressed("dash") and canDash and can_attack:
 			stateMachine.transition_to("PlayerDash")
@@ -109,7 +109,6 @@ func _on_dash_timeout_timeout() -> void:
 func _on_attack_timeout_timeout() -> void:
 	can_attack = true
 
-@rpc("call_local", "reliable")
 func change_anim_state(state_name: String):
 		animationState.travel(state_name)
 

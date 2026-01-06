@@ -2,7 +2,7 @@ extends PlayerState
 class_name PlayerDash
 
 func enter():
-	player.change_anim_state.rpc("dash")
+	player.animationTree["parameters/conditions/dashing"] = true
 	player.dashTimeout.start()
 	print_debug(self)
 	player.set_collision_layer_value(1, false)
@@ -18,6 +18,7 @@ func enter():
 		player.velocity.z = forward_direction.z * player.DASH_SPEED
 
 func exit():
+	player.animationTree["parameters/conditions/dashing"] = false
 	player.set_collision_layer_value(1, true)
 
 func physics_update(_delta: float) -> void:

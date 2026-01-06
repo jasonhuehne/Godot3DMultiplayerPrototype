@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://u2f1js3kjrdi"]
+[gd_scene load_steps=56 format=3 uid="uid://u2f1js3kjrdi"]
 
 [ext_resource type="Script" uid="uid://c2si8gkbnde0c" path="res://scripts/player.gd" id="1_cw2d6"]
 [ext_resource type="Texture2D" uid="uid://draxnnsydk6vo" path="res://test.tres" id="2_rtsbg"]
@@ -10,6 +10,8 @@
 [ext_resource type="Script" uid="uid://b3ufb16j8yxne" path="res://scripts/PlayerKnockback.gd" id="6_khinc"]
 [ext_resource type="Script" uid="uid://4uaytkvbkre" path="res://scripts/PlayerDash.gd" id="7_cw2d6"]
 [ext_resource type="Script" uid="uid://b17atnpgnwsg3" path="res://scripts/PlayerAttack.gd" id="9_pnmcy"]
+[ext_resource type="Script" uid="uid://dq5odkj7pim62" path="res://scripts/PlayerCharge.gd" id="11_jn51r"]
+[ext_resource type="Script" uid="uid://egd3dtgjgp28" path="res://scripts/PlayerCharged.gd" id="12_bkbtv"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rtsbg"]
 radius = 0.6538086
@@ -33,6 +35,9 @@ properties/1/replication_mode = 1
 properties/2/path = NodePath("MeshInstance3D:rotation")
 properties/2/spawn = true
 properties/2/replication_mode = 1
+properties/3/path = NodePath("State Machine:currentState_name")
+properties/3/spawn = true
+properties/3/replication_mode = 2
 
 [sub_resource type="Animation" id="Animation_d2uvk"]
 length = 0.001
@@ -287,22 +292,6 @@ tracks/0/keys = {
 "values": [Vector3(-2.0262385e-10, 0, 2.3283064e-10), Vector3(0, 0.02, 0), Vector3(0, 0, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_bkbtv"]
-resource_name = "walking"
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.46666667, 1),
-"transitions": PackedFloat32Array(1.2745613, 1.681794, 0.5547855),
-"update": 0,
-"values": [Vector3(-2.0262385e-10, 0, 2.3283064e-10), Vector3(-2.0262385e-10, 0.087111354, 2.3283064e-10), Vector3(0, 0, 0)]
-}
-
 [sub_resource type="Animation" id="Animation_xgf8p"]
 resource_name = "knockback"
 length = 0.33
@@ -317,6 +306,22 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 0.46651652, 1, 1),
 "update": 0,
 "values": [Vector3(1, 1, 1), Vector3(1, 0.9, 1), Vector3(1, 1.05, 1), Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_bkbtv"]
+resource_name = "walking"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.46666667, 1),
+"transitions": PackedFloat32Array(1.2745613, 1.681794, 0.5547855),
+"update": 0,
+"values": [Vector3(-2.0262385e-10, 0, 2.3283064e-10), Vector3(-2.0262385e-10, 0.087111354, 2.3283064e-10), Vector3(0, 0, 0)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_jn51r"]
@@ -358,28 +363,15 @@ resource_local_to_scene = true
 animation = &"walking"
 advance_on_start = true
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_a6urh"]
-advance_mode = 2
-advance_condition = &"charging"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xgf8p"]
-switch_mode = 1
-advance_mode = 2
-advance_condition = &"charged"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_wj53m"]
-advance_mode = 2
-advance_condition = &"attacking"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_hbshb"]
-reset = false
-advance_mode = 0
-advance_condition = &"charging"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ypepm"]
-switch_mode = 2
-
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_n3wk0"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_0potc"]
+advance_mode = 2
+advance_condition = &"dashing"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_qce6l"]
+switch_mode = 2
 advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_lm846"]
@@ -398,18 +390,11 @@ advance_condition = &"is_not_moving"
 advance_mode = 2
 advance_condition = &"dashing"
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_0potc"]
-advance_mode = 2
-advance_condition = &"dashing"
-
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_fesw4"]
 xfade_time = 0.22
 switch_mode = 2
 advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_qce6l"]
-switch_mode = 2
-advance_mode = 2
+advance_condition = &"is_moving"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_bfcyu"]
 switch_mode = 1
@@ -421,50 +406,85 @@ switch_mode = 1
 advance_mode = 2
 advance_condition = &"hit"
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_qhbr1"]
-xfade_time = 0.1
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_c6b0m"]
+switch_mode = 2
 advance_mode = 2
-advance_condition = &"hit"
+advance_condition = &"is_moving"
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_60h7d"]
-xfade_time = 0.1
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_jwk5v"]
+switch_mode = 2
 advance_mode = 2
-advance_condition = &"hit"
+advance_condition = &"is_not_moving"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ypepm"]
+switch_mode = 2
+advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_jpdyr"]
 switch_mode = 1
 advance_mode = 2
 advance_condition = &"hit"
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_c6b0m"]
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_wj53m"]
 advance_mode = 2
-advance_condition = &"knockbackEnd"
+advance_condition = &"attacking"
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_jwk5v"]
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_qhbr1"]
+xfade_time = 0.1
 advance_mode = 2
-advance_condition = &"knockbackEnd"
+advance_condition = &"hit"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xgf8p"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_hbshb"]
+switch_mode = 1
+advance_mode = 2
+advance_condition = &"charging"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_60h7d"]
+xfade_time = 0.1
+advance_mode = 2
+advance_condition = &"hit"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_jn51r"]
+advance_mode = 2
+advance_condition = &"charging"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_bkbtv"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_a6urh"]
+advance_mode = 2
+advance_condition = &"attacking"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_j1grs"]
+advance_mode = 2
+advance_condition = &"charging"
 
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_lm846"]
-states/Start/position = Vector2(88, 69)
+states/Start/position = Vector2(21, 67)
 states/attack/node = SubResource("AnimationNodeAnimation_rtsbg")
 states/attack/position = Vector2(548, -12)
 states/charge/node = SubResource("AnimationNodeAnimation_d2uvk")
-states/charge/position = Vector2(468, 115)
+states/charge/position = Vector2(444, 100)
 states/charged/node = SubResource("AnimationNodeAnimation_jn51r")
 states/charged/position = Vector2(554, 201)
 states/dash/node = SubResource("AnimationNodeAnimation_a6urh")
-states/dash/position = Vector2(252, 233)
+states/dash/position = Vector2(154, -101)
 states/idle/node = SubResource("AnimationNodeAnimation_hbshb")
 states/idle/position = Vector2(162, 123)
 states/knockback/node = SubResource("AnimationNodeAnimation_xgf8p")
-states/knockback/position = Vector2(414, 338)
-states/walking/node = SubResource("AnimationNodeAnimation_bkbtv")
-states/walking/position = Vector2(306, 115)
-transitions = ["charge", "attack", SubResource("AnimationNodeStateMachineTransition_a6urh"), "charge", "charged", SubResource("AnimationNodeStateMachineTransition_xgf8p"), "charged", "attack", SubResource("AnimationNodeStateMachineTransition_wj53m"), "walking", "charge", SubResource("AnimationNodeStateMachineTransition_hbshb"), "attack", "walking", SubResource("AnimationNodeStateMachineTransition_ypepm"), "Start", "idle", SubResource("AnimationNodeStateMachineTransition_n3wk0"), "idle", "walking", SubResource("AnimationNodeStateMachineTransition_lm846"), "walking", "idle", SubResource("AnimationNodeStateMachineTransition_mswon"), "walking", "dash", SubResource("AnimationNodeStateMachineTransition_454a0"), "idle", "dash", SubResource("AnimationNodeStateMachineTransition_0potc"), "dash", "walking", SubResource("AnimationNodeStateMachineTransition_fesw4"), "dash", "idle", SubResource("AnimationNodeStateMachineTransition_qce6l"), "walking", "knockback", SubResource("AnimationNodeStateMachineTransition_bfcyu"), "idle", "knockback", SubResource("AnimationNodeStateMachineTransition_4xdeo"), "charged", "knockback", SubResource("AnimationNodeStateMachineTransition_qhbr1"), "charge", "knockback", SubResource("AnimationNodeStateMachineTransition_60h7d"), "attack", "knockback", SubResource("AnimationNodeStateMachineTransition_jpdyr"), "knockback", "walking", SubResource("AnimationNodeStateMachineTransition_c6b0m"), "knockback", "idle", SubResource("AnimationNodeStateMachineTransition_jwk5v")]
-graph_offset = Vector2(15, -105)
+states/knockback/position = Vector2(413, 338)
+states/move/node = SubResource("AnimationNodeAnimation_bkbtv")
+states/move/position = Vector2(320, 4)
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_n3wk0"), "idle", "dash", SubResource("AnimationNodeStateMachineTransition_0potc"), "dash", "idle", SubResource("AnimationNodeStateMachineTransition_qce6l"), "idle", "move", SubResource("AnimationNodeStateMachineTransition_lm846"), "move", "idle", SubResource("AnimationNodeStateMachineTransition_mswon"), "move", "dash", SubResource("AnimationNodeStateMachineTransition_454a0"), "dash", "move", SubResource("AnimationNodeStateMachineTransition_fesw4"), "move", "knockback", SubResource("AnimationNodeStateMachineTransition_bfcyu"), "idle", "knockback", SubResource("AnimationNodeStateMachineTransition_4xdeo"), "knockback", "move", SubResource("AnimationNodeStateMachineTransition_c6b0m"), "knockback", "idle", SubResource("AnimationNodeStateMachineTransition_jwk5v"), "attack", "move", SubResource("AnimationNodeStateMachineTransition_ypepm"), "attack", "knockback", SubResource("AnimationNodeStateMachineTransition_jpdyr"), "charged", "attack", SubResource("AnimationNodeStateMachineTransition_wj53m"), "charged", "knockback", SubResource("AnimationNodeStateMachineTransition_qhbr1"), "charge", "charged", SubResource("AnimationNodeStateMachineTransition_xgf8p"), "move", "charge", SubResource("AnimationNodeStateMachineTransition_hbshb"), "charge", "knockback", SubResource("AnimationNodeStateMachineTransition_60h7d"), "idle", "charge", SubResource("AnimationNodeStateMachineTransition_jn51r"), "attack", "idle", SubResource("AnimationNodeStateMachineTransition_bkbtv"), "charge", "attack", SubResource("AnimationNodeStateMachineTransition_a6urh"), "knockback", "charge", SubResource("AnimationNodeStateMachineTransition_j1grs")]
+graph_offset = Vector2(-20, -40)
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("_body") groups=["player"]]
-collision_layer = 7
+collision_layer = 3
 collision_mask = 5
 script = ExtResource("1_cw2d6")
 _body = NodePath(".")
@@ -530,6 +550,12 @@ script = ExtResource("9_pnmcy")
 damage_curve = SubResource("Curve_pnmcy")
 metadata/_custom_type_script = "uid://b17atnpgnwsg3"
 
+[node name="PlayerCharge" type="Node" parent="State Machine"]
+script = ExtResource("11_jn51r")
+
+[node name="PlayerCharged" type="Node" parent="State Machine"]
+script = ExtResource("12_bkbtv")
+
 [node name="ChargeTime" type="Timer" parent="State Machine"]
 wait_time = 1.5
 one_shot = true
@@ -556,13 +582,11 @@ root_motion_local = true
 tree_root = SubResource("AnimationNodeStateMachine_lm846")
 anim_player = NodePath("../AnimationPlayer")
 parameters/conditions/attacking = false
-parameters/conditions/charged = false
 parameters/conditions/charging = false
 parameters/conditions/dashing = false
 parameters/conditions/hit = false
 parameters/conditions/is_moving = false
 parameters/conditions/is_not_moving = false
-parameters/conditions/knockbackEnd = false
 
 [node name="PlayerNick" type="Node3D" parent="."]
 transform = Transform3D(1, 0, -1.7484555e-07, 0, 1, 0, 1.7484555e-07, 0, 1, 0, 2.6973486, 1.3877788e-17)

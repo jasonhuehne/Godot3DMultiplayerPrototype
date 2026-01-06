@@ -6,8 +6,9 @@ var friction: float = 20
 var timer_started = false
 
 func enter():
+	if player:
+		player.animationTree["parameters/conditions/hit"] = true
 	print_debug("PlayerKnocknack")
-	player.change_anim_state.rpc("knockback")
 	player.set_collision_layer_value(1, false)
 	timer_started = false
 	var direction = player.last_hit_direction
@@ -17,6 +18,7 @@ func enter():
 		knockback_force = 15
 	player.velocity = direction * knockback_force
 func exit():
+	player.animationTree["parameters/conditions/hit"] = false
 	player.set_collision_layer_value(1, true)
 	player.stunTimeout.stop()
 func physics_update(delta: float) -> void:
@@ -28,7 +30,7 @@ func physics_update(delta: float) -> void:
 func _on_stun_time_timeout() -> void:
 	var input_dir := Input.get_vector("left", "right", "forward", "backward")
 	if Input.is_action_pressed("attack") and player.can_attack:
-		Transitioned.emit(self, "PlayerAttack")
+		Transitioned.emit(self, "PlayerCharge")
 	elif Input.is_action_just_pressed("dash") and player.canDash:
 		Transitioned.emit(self, "PlayerDash")	
 	elif not input_dir == Vector2.ZERO:
