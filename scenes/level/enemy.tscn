@@ -164,8 +164,8 @@ _data = {
 }
 
 [node name="enemy" type="CharacterBody3D" groups=["enemies"]]
-collision_layer = 7
-collision_mask = 5
+collision_layer = 13
+collision_mask = 13
 script = ExtResource("1_b6abq")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
@@ -176,7 +176,7 @@ texture = SubResource("ViewportTexture_scy4r")
 [node name="SubViewport" parent="." instance=ExtResource("2_6rhmk")]
 
 [node name="Weapon" type="Node3D" parent="."]
-transform = Transform3D(0.986247, 0.079384774, -0.14495893, -0.05536137, 0.9851, 0.16281927, 0.15572445, -0.15255474, 0.9759496, 0.7016195, 1.4226631, -0.70394063)
+transform = Transform3D(0.98624694, 0.07938477, -0.14495893, -0.055361368, 0.98509985, 0.16281927, 0.15572444, -0.15255472, 0.9759496, 0.7016195, 1.4226631, -0.70394063)
 rotation_order = 0
 
 [node name="Mesh" type="MeshInstance3D" parent="Weapon"]

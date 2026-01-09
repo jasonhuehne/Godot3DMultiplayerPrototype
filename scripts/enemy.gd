@@ -131,7 +131,7 @@ func take_damage(damage, hit_direction):
 		death.emit()
 		queue_free()
 	elif not stateMachine.currentState == $"State Machine/EnemyKnockback":
-		stateMachine.transition_to("EnemyKnockback")
+		stateMachine.transition_to(stateMachine.currentState.name, "EnemyKnockback")
 	print_debug("health: ", HEALTH)
 
 func _recalculate_aggro():

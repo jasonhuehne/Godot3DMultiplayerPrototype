@@ -1,7 +1,6 @@
-[gd_scene load_steps=56 format=3 uid="uid://u2f1js3kjrdi"]
+[gd_scene load_steps=55 format=3 uid="uid://u2f1js3kjrdi"]
 
 [ext_resource type="Script" uid="uid://c2si8gkbnde0c" path="res://scripts/player.gd" id="1_cw2d6"]
-[ext_resource type="Texture2D" uid="uid://draxnnsydk6vo" path="res://test.tres" id="2_rtsbg"]
 [ext_resource type="ArrayMesh" uid="uid://cvyxyp5gg6qjb" path="res://assets/model/Character.obj" id="2_v6fml"]
 [ext_resource type="ArrayMesh" uid="uid://dqkfb46efxgq" path="res://assets/Sword.tres" id="3_2l1sl"]
 [ext_resource type="Script" uid="uid://bhbspob3tdjx8" path="res://scripts/state_machine.gd" id="3_mdl7e"]
@@ -35,7 +34,7 @@ properties/1/replication_mode = 1
 properties/2/path = NodePath("MeshInstance3D:rotation")
 properties/2/spawn = true
 properties/2/replication_mode = 1
-properties/3/path = NodePath("State Machine:currentState_name")
+properties/3/path = NodePath("State Machine:currentState.name")
 properties/3/spawn = true
 properties/3/replication_mode = 2
 
@@ -481,14 +480,12 @@ states/knockback/position = Vector2(413, 338)
 states/move/node = SubResource("AnimationNodeAnimation_bkbtv")
 states/move/position = Vector2(320, 4)
 transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_n3wk0"), "idle", "dash", SubResource("AnimationNodeStateMachineTransition_0potc"), "dash", "idle", SubResource("AnimationNodeStateMachineTransition_qce6l"), "idle", "move", SubResource("AnimationNodeStateMachineTransition_lm846"), "move", "idle", SubResource("AnimationNodeStateMachineTransition_mswon"), "move", "dash", SubResource("AnimationNodeStateMachineTransition_454a0"), "dash", "move", SubResource("AnimationNodeStateMachineTransition_fesw4"), "move", "knockback", SubResource("AnimationNodeStateMachineTransition_bfcyu"), "idle", "knockback", SubResource("AnimationNodeStateMachineTransition_4xdeo"), "knockback", "move", SubResource("AnimationNodeStateMachineTransition_c6b0m"), "knockback", "idle", SubResource("AnimationNodeStateMachineTransition_jwk5v"), "attack", "move", SubResource("AnimationNodeStateMachineTransition_ypepm"), "attack", "knockback", SubResource("AnimationNodeStateMachineTransition_jpdyr"), "charged", "attack", SubResource("AnimationNodeStateMachineTransition_wj53m"), "charged", "knockback", SubResource("AnimationNodeStateMachineTransition_qhbr1"), "charge", "charged", SubResource("AnimationNodeStateMachineTransition_xgf8p"), "move", "charge", SubResource("AnimationNodeStateMachineTransition_hbshb"), "charge", "knockback", SubResource("AnimationNodeStateMachineTransition_60h7d"), "idle", "charge", SubResource("AnimationNodeStateMachineTransition_jn51r"), "attack", "idle", SubResource("AnimationNodeStateMachineTransition_bkbtv"), "charge", "attack", SubResource("AnimationNodeStateMachineTransition_a6urh"), "knockback", "charge", SubResource("AnimationNodeStateMachineTransition_j1grs")]
-graph_offset = Vector2(-20, -40)
+graph_offset = Vector2(-102, 105)
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("_body") groups=["player"]]
-collision_layer = 3
-collision_mask = 5
+[node name="Player" type="CharacterBody3D" groups=["player"]]
+collision_layer = 11
+collision_mask = 7
 script = ExtResource("1_cw2d6")
-_body = NodePath(".")
-blue_texture = ExtResource("2_rtsbg")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, -1.7484555e-07, 0, 1, 0, 1.7484555e-07, 0, 1, -2.0262385e-10, 0, 2.3283064e-10)

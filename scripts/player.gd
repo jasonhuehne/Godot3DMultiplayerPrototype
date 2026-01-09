@@ -8,7 +8,7 @@ const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 const SENSITIVITY = 0.003
 const DASH_SPEED = 20
-@export var HEALTH = 100
+@export var HEALTH = 100 #Wird repliziert von Synchronizer
 
 @onready var head = $Head
 @onready var body: MeshInstance3D = $MeshInstance3D
@@ -30,15 +30,6 @@ var is_dashing = false
 var last_hit_direction: Vector3 = Vector3.ZERO
 var last_damage: int
 var player_inventory: PlayerInventory
-@export_category("Objects")
-@export var _body: Node3D = null
-
-@export_category("Skin Colors")
-@export var blue_texture : CompressedTexture2D
-@export var yellow_texture : CompressedTexture2D
-@export var green_texture : CompressedTexture2D
-@export var red_texture : CompressedTexture2D
-
 func _enter_tree():
 	var id = str(name).to_int()
 	if id > 0:
@@ -81,10 +72,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if stateMachine.currentState.name == "PlayerMove":
 		if Input.is_action_just_pressed("attack") and can_attack:
-			stateMachine.transition_to("PlayerCharge")
+			stateMachine.transition_to(stateMachine.currentState.name, "PlayerCharge")
 			return
 		if Input.is_action_just_pressed("dash") and canDash and can_attack:
-			stateMachine.transition_to("PlayerDash")
+			stateMachine.transition_to(stateMachine.currentState.name, "PlayerDash")
 	if event.is_action_pressed("escape"):
 		get_tree().quit()
 	if event is InputEventMouseMotion:
@@ -112,12 +103,13 @@ func _on_attack_timeout_timeout() -> void:
 func change_anim_state(state_name: String):
 		animationState.travel(state_name)
 
+# Health Network Funtions - Server authorative, client-specific
 @rpc ("any_peer","call_local", "reliable")
 func take_damage(DAMAGE, knockback_direction) -> void:
 	if not multiplayer.is_server():
 		return
 
-	HEALTH -= DAMAGE
+	HEALTH -= DAMAGE #Wird repliziert von Synchronizer
 
 	var owner_id = get_multiplayer_authority()
 	sync_health_to_owner.rpc_id(owner_id, HEALTH, knockback_direction, DAMAGE)
@@ -133,16 +125,17 @@ func request_death() -> void:
 @rpc("any_peer", "call_local", "reliable")
 func sync_health_to_owner(new_health: int, direction, amount):
 	if multiplayer.get_remote_sender_id() != 1:
-		print_debug("Falscher Sender von Health Sync")
+		print_debug("Wrong sender of Health Sync")
 		return
 	if is_multiplayer_authority():
 		if direction != null:
 			last_hit_direction = direction
-			stateMachine.transition_to("PlayerKnockback")
+		stateMachine.transition_to(stateMachine.currentState.name, "PlayerKnockback")
 		if amount != null:
 			last_damage = amount
 		HEALTH = new_health
 		health_changed.emit(HEALTH, get_multiplayer_authority())
+
 
 # Inventory Network Functions - Server authoritative, client-specific
 @rpc("any_peer", "call_local", "reliable")

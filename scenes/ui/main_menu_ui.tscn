@@ -43,7 +43,7 @@ size_flags_horizontal = 6
 size_flags_vertical = 0
 theme_override_fonts/font = ExtResource("1_font")
 theme_override_font_sizes/font_size = 70
-text = "Multiplayer Template"
+text = "Multiplayer 3D Bossfight"
 
 [node name="MainMenu" type="VBoxContainer" parent="MainContainer"]
 layout_direction = 1
@@ -84,22 +84,6 @@ layout_mode = 2
 size_flags_vertical = 4
 alignment = 1
 
-[node name="Label" type="Label" parent="MainContainer/MainMenu/Option2"]
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_fonts/font = ExtResource("1_font")
-theme_override_font_sizes/font_size = 35
-text = "Player Skin : "
-
-[node name="SkinInput" type="LineEdit" parent="MainContainer/MainMenu/Option2"]
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_fonts/font = ExtResource("1_font")
-theme_override_font_sizes/font_size = 35
-placeholder_text = "blue"
-alignment = 1
-expand_to_text_length = true
-
 [node name="Option3" type="HBoxContainer" parent="MainContainer/MainMenu"]
 layout_mode = 2
 size_flags_horizontal = 4
@@ -133,8 +117,8 @@ alignment = 1
 
 [node name="Host" type="Button" parent="MainContainer/MainMenu/Buttons"]
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(0, 0.52549, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 0.52549, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0.52549, 0, 1)
 theme_override_fonts/font = ExtResource("1_font")
 theme_override_font_sizes/font_size = 35
 text = "HOST"
@@ -142,8 +126,8 @@ flat = true
 
 [node name="Join" type="Button" parent="MainContainer/MainMenu/Buttons"]
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(0, 0.525257, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 0.52549, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0.525257, 0, 1)
 theme_override_fonts/font = ExtResource("1_font")
 theme_override_font_sizes/font_size = 35
 text = "JOIN"
@@ -157,8 +141,8 @@ alignment = 1
 
 [node name="Quit" type="Button" parent="MainContainer/MainMenu/Option4"]
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(0.858807, 4.71681e-06, 1.15514e-06, 0.862745)
 theme_override_colors/font_pressed_color = Color(0.858824, 0, 0, 0.862745)
+theme_override_colors/font_hover_color = Color(0.858807, 4.71681e-06, 1.15514e-06, 0.862745)
 theme_override_fonts/font = ExtResource("1_font")
 theme_override_font_sizes/font_size = 35
 text = "QUIT"

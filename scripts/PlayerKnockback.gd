@@ -8,7 +8,7 @@ var timer_started = false
 func enter():
 	if player:
 		player.animationTree["parameters/conditions/hit"] = true
-	print_debug("PlayerKnocknack")
+	print_debug("PlayerKnockback")
 	player.set_collision_layer_value(1, false)
 	timer_started = false
 	var direction = player.last_hit_direction

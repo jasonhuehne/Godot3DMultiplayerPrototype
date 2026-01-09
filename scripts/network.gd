@@ -6,8 +6,7 @@ const MAX_PLAYERS : int = 4
 
 var players = {}
 var player_info = {
-	"nick" : "host",
-	"skin" : Character.SkinColor.BLUE
+	"nick" : "host"
 }
 
 signal player_connected(peer_id, player_info)
@@ -24,7 +23,7 @@ func _ready() -> void:
 	multiplayer.peer_connected.connect(_on_player_connected)
 	multiplayer.connected_to_server.connect(_on_connected_ok)
 
-func start_host(nickname: String, skin_color_str: String):
+func start_host(nickname: String):
 	var peer = ENetMultiplayerPeer.new()
 	var error = peer.create_server(SERVER_PORT, MAX_PLAYERS)
 	if error:
@@ -35,11 +34,10 @@ func start_host(nickname: String, skin_color_str: String):
 		nickname = "Host_" + str(multiplayer.get_unique_id())
 
 	player_info["nick"] = nickname
-	player_info["skin"] = skin_str_to_e(skin_color_str)
 	players[1] = player_info
 	player_connected.emit(1, player_info)
 
-func join_game(nickname: String, skin_color_str: String, address: String = SERVER_ADDRESS):
+func join_game(nickname: String, address: String = SERVER_ADDRESS):
 	var peer = ENetMultiplayerPeer.new()
 	var error = peer.create_client(address, SERVER_PORT)
 	if error:
@@ -50,10 +48,7 @@ func join_game(nickname: String, skin_color_str: String, address: String = SERVE
 	if !nickname or nickname.strip_edges() == "":
 		nickname = "Player_" + str(multiplayer.get_unique_id())
 
-	var skin_enum = skin_str_to_e(skin_color_str)
-
 	player_info["nick"] = nickname
-	player_info["skin"] = skin_enum
 
 func _on_connected_ok():
 	var peer_id = multiplayer.get_unique_id()
@@ -79,11 +74,3 @@ func _on_server_disconnected():
 	multiplayer.multiplayer_peer = null
 	players.clear()
 	server_disconnected.emit()
-
-func skin_str_to_e(s):
-	match s.to_lower():
-		"blue": return Character.SkinColor.BLUE
-		"yellow": return Character.SkinColor.YELLOW
-		"green": return Character.SkinColor.GREEN
-		"red": return Character.SkinColor.RED
-		_: return Character.SkinColor.BLUE

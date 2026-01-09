@@ -41,13 +41,13 @@ func _ready():
 func _on_player_connected(peer_id, player_info):
 	_add_player(peer_id, player_info)
 
-func _on_host_pressed(nickname: String, skin: String):
+func _on_host_pressed(nickname: String):
 	main_menu.hide_menu()
-	Network.start_host(nickname, skin)
+	Network.start_host(nickname)
 
-func _on_join_pressed(nickname: String, skin: String, address: String):
+func _on_join_pressed(nickname: String, address: String):
 	main_menu.hide_menu()
-	Network.join_game(nickname, skin, address)
+	Network.join_game(nickname, address)
 
 func _add_player(id: int, player_info : Dictionary):
 	if players_container.has_node(str(id)):
@@ -62,8 +62,6 @@ func _add_player(id: int, player_info : Dictionary):
 	if id == multiplayer.get_unique_id():
 		setup_healthbar(player)
 		currencyLabel.show()
-
-	var skin_enum = player_info["skin"]
 	#player.set_player_skin(skin_enum)
 
 func _spawnmob():
