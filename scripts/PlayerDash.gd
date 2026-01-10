@@ -2,11 +2,11 @@ extends PlayerState
 class_name PlayerDash
 
 func enter():
-	player.animationTree["parameters/conditions/dashing"] = true
-	player.dashTimeout.start()
+	player.animation_tree["parameters/conditions/dashing"] = true
+	player.dash_timeout.start()
 	print_debug(self)
-	player.set_collision_layer_value(1, false)
-	player.canDash = false
+	player.set_collision_layer_value(5, false)
+	player.can_dash = false
 	var input_dir := Input.get_vector("left", "right", "forward", "backward")
 	var direction = (player.head.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
@@ -18,8 +18,8 @@ func enter():
 		player.velocity.z = forward_direction.z * player.DASH_SPEED
 
 func exit():
-	player.animationTree["parameters/conditions/dashing"] = false
-	player.set_collision_layer_value(1, true)
+	player.animation_tree["parameters/conditions/dashing"] = false
+	player.set_collision_layer_value(5, true)
 
 func physics_update(_delta: float) -> void:
 	player.velocity = player.velocity.move_toward(Vector3.ZERO, 50 * _delta)

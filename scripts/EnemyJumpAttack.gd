@@ -1,37 +1,32 @@
 extends EnemyState
 class_name EnemyJumpAttack
 
-var waited = false
 func enter():
+	enemy.set_collision_layer_value(1, false)
 	print_debug(self)
-	waited = false
-	enemy.jumpAttackTimeout.start()
+	enemy.animation_player.play("jumpAttack")
+	if is_multiplayer_authority():
+		enemy.jumpAttackTimeout.start()
 func exit():
-	waited = false
-func physics_update(delta: float) -> void:
-	if not waited:
-		enemy.velocity = Vector3.UP * randf_range(3, 5)
-	if waited:
-		if not enemy.is_on_floor():
-			enemy.velocity += enemy.get_gravity() * delta * 4
-		if enemy.is_on_floor():
-			if enemy.groundTimeout.is_stopped():
-				enemy.groundTimeout.start()
-				enemy.spawn_shockwave()
-	enemy.move_and_slide();
+	enemy.set_collision_layer_value(1, true)
 
 	
-func update(_delta: float) -> void:
-	return
-	
-
-func _on_jump_timeout() -> void:
-	if waited == false:
-		waited = true
-
-
 func _on_ground_timeout() -> void:
+	if not multiplayer.is_server():
+		return
 	if enemy.target_player:
 		Transitioned.emit(self, "EnemyChase")
 	else:
 		Transitioned.emit(self, "EnemyMove")
+
+func _on_animation_player_animation_finished(anim_name: StringName) -> void:
+	if not is_multiplayer_authority():
+		return
+	if anim_name == "jumpAttack":
+		enemy.groundTimeout.start()
+
+
+func _on_jump_timeout() -> void:
+	if not is_multiplayer_authority():
+		return
+	enemy.spawn_shockwave()

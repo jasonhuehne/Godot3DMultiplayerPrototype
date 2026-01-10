@@ -3,18 +3,18 @@ class_name PlayerCharge
 
 func enter():
 	if player:
-		player.animationTree["parameters/conditions/charging"] = true
+		player.animation_tree["parameters/conditions/charging"] = true
 	print_debug(self)
 	player.can_attack = false
-	player.chargeTime.start()
-	player.attackTimeout.start()
+	player.charge_time.start()
+	player.attack_timeout.start()
 func exit():
-	player.animationTree["parameters/conditions/charging"] = false
+	player.animation_tree["parameters/conditions/charging"] = false
 
 func physics_update(delta: float) -> void:
 
 	if Input.is_action_pressed("attack"):
-		if player.chargeTime.time_left <= 0:
+		if player.charge_time.time_left <= 0:
 			Transitioned.emit(self, "PlayerCharged")
 
 	elif Input.is_action_just_released("attack"):
@@ -25,8 +25,8 @@ func physics_update(delta: float) -> void:
 	var input_dir := Input.get_vector("left", "right", "forward", "backward")
 	var direction = (player.head.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
-		player.velocity.x = direction.x * player.SPEED/3
-		player.velocity.z = direction.z * player.SPEED/3  
+		player.velocity.x = direction.x * 2
+		player.velocity.z = direction.z * 2 
 	else:
 		player.velocity.x = move_toward(player.velocity.x, 0, player.SPEED)
 		player.velocity.z = move_toward(player.velocity.z, 0, player.SPEED)

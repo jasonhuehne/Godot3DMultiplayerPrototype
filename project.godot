@@ -99,3 +99,4 @@ escape={
 3d_physics/layer_2="PlayerPresence"
 3d_physics/layer_3="world"
 3d_physics/layer_4="Enemy"
+3d_physics/layer_5="Shockwave"

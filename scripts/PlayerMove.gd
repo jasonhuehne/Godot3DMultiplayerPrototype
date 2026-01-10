@@ -2,10 +2,10 @@ extends PlayerState
 class_name PlayerMove
 func enter():
 	if player:
-		player.animationTree["parameters/conditions/is_moving"] = true
+		player.animation_tree["parameters/conditions/is_moving"] = true
 	print_debug(self)
 func exit():
-	player.animationTree["parameters/conditions/is_moving"] = false
+	player.animation_tree["parameters/conditions/is_moving"] = false
 	
 
 

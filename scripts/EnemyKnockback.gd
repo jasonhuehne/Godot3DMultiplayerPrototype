@@ -19,7 +19,7 @@ func enter():
 		knockback_force = 10*curve_value
 	enemy.velocity = direction * knockback_force
 func exit():
-	enemy.stunTimeout.stop()
+	enemy.stun_timeout.stop()
 func physics_update(delta: float) -> void:
 	enemy.velocity = enemy.velocity.move_toward(Vector3.ZERO, friction * delta)
 	
@@ -28,7 +28,7 @@ func physics_update(delta: float) -> void:
 	if enemy.velocity.length() < 0.1:
 		if not timer_started:
 			timer_started = true
-			enemy.stunTimeout.start()		
+			enemy.stun_timeout.start()		
 
 func _on_stun_time_timeout() -> void:
 	if enemy.aggressive:

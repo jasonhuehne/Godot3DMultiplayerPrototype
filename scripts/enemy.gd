@@ -36,6 +36,7 @@ var spawnedShockwave = false
 var shockwave_scene = preload("res://scenes/level/shockwave.tscn")
 
 #Nodes
+@onready var sprite3D = $Sprite3D
 @onready var hitbox = $hitbox
 @onready var navigation_agent_3d: NavigationAgent3D = $NavigationAgent3D 
 @onready var healTimer = $"State Machine/EnemyMove/HealTimer"
@@ -43,9 +44,9 @@ var shockwave_scene = preload("res://scenes/level/shockwave.tscn")
 @onready var jumpAttackTimeout = $"State Machine/EnemyJumpAttack/Jump"
 @onready var groundTimeout = $"State Machine/EnemyJumpAttack/Ground"
 @onready var meleeTimeout = $"State Machine/EnemyMeleeAttack/Timeout"
-@onready var stunTimeout = $"State Machine/EnemyKnockback/StunTime"
-@onready var stateMachine = $"State Machine"
-@onready var animationPlayer = $AnimationPlayer
+@onready var stun_timeout = $"State Machine/EnemyKnockback/StunTime"
+@onready var state_machine = $"State Machine"
+@onready var animation_player = $AnimationPlayer
 @onready var players_container = get_node("/root/Level/PlayersContainer")
 @onready var healtBar = $SubViewport/Healthbar3D
 
@@ -111,7 +112,6 @@ func _spawn_vfx():
 func take_damage(damage, hit_direction):
 	if not is_multiplayer_authority():
 		return
-	
 	var attacker_id = multiplayer.get_remote_sender_id()
 	if attacker_id == 0:
 		attacker_id = 1
@@ -130,8 +130,8 @@ func take_damage(damage, hit_direction):
 	if HEALTH <= 0:
 		death.emit()
 		queue_free()
-	elif not stateMachine.currentState == $"State Machine/EnemyKnockback":
-		stateMachine.transition_to(stateMachine.currentState.name, "EnemyKnockback")
+	elif not state_machine.currentState == $"State Machine/EnemyKnockback":
+		state_machine.transition_to(state_machine.currentState.name, "EnemyKnockback")
 	print_debug("health: ", HEALTH)
 
 func _recalculate_aggro():

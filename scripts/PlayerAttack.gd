@@ -6,13 +6,13 @@ var charge_time: float
 @export var damage_curve: Curve
 
 func enter():
-	player.animationTree["parameters/conditions/attacking"] = true
+	player.animation_tree["parameters/conditions/attacking"] = true
 	player.set_collision_layer_value(1, false)
 	did_damage = false
-	charge_time = 1.5 - player.chargeTime.time_left
+	charge_time = 1.5 - player.charge_time.time_left
 	print_debug(self)
 func exit():
-	player.animationTree["parameters/conditions/attacking"] = false
+	player.animation_tree["parameters/conditions/attacking"] = false
 	player.set_collision_layer_value(1, true)
 
 func physics_update(delta: float) -> void:
@@ -21,8 +21,8 @@ func physics_update(delta: float) -> void:
 	var input_dir := Input.get_vector("left", "right", "forward", "backward")
 	var direction = (player.head.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
-		player.velocity.x = direction.x * player.SPEED/3
-		player.velocity.z = direction.z * player.SPEED/3  
+		player.velocity.x = direction.x * 2
+		player.velocity.z = direction.z * 2 
 	else:
 		player.velocity.x = move_toward(player.velocity.x, 0, player.SPEED)
 		player.velocity.z = move_toward(player.velocity.z, 0, player.SPEED)

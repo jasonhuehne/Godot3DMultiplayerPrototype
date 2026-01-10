@@ -4,29 +4,38 @@ class_name Character
 enum SkinColor { BLUE, YELLOW, GREEN, RED }
 signal health_changed(new_value)
 
-const SPEED = 5.0
-const JUMP_VELOCITY = 4.5
-const SENSITIVITY = 0.003
-const DASH_SPEED = 20
+
+const SPEED = 5
+const SENSITIVITY = 0.002
+const DASH_SPEED = 25
 @export var HEALTH = 100 #Wird repliziert von Synchronizer
+var _current_speed: float
+
 
 @onready var head = $Head
 @onready var body: MeshInstance3D = $MeshInstance3D
-@onready var bodyCollider: CollisionShape3D = $CollisionShape3D
-@onready var chargeTime: Timer = $"State Machine/ChargeTime"
-@onready var attackTimeout: Timer = $"State Machine/AttackTimeout"
-@onready var dashTimeout: Timer = $"State Machine/DashTimeout"
-@onready var stunTimeout: Timer = $"State Machine/StunTime"
-@onready var camera: Node3D = $Head/Camera3D
-@onready var animationPlayer: AnimationPlayer = $AnimationPlayer
-@onready var animationTree: AnimationTree = $AnimationTree
+@onready var body_collider: CollisionShape3D = $CollisionShape3D
 @onready var nickname: Label3D = $PlayerNick/Nickname
-@onready var stateMachine = $"State Machine"
-var animationState
-var _current_speed: float
-var canDash = true
+@onready var camera: Node3D = $Head/Camera3D
+
+
+@onready var state_machine = $"State Machine"
+@onready var charge_time: Timer = $"State Machine/ChargeTime"
+@onready var attack_timeout: Timer = $"State Machine/AttackTimeout"
+@onready var dash_timeout: Timer = $"State Machine/DashTimeout"
+@onready var stun_timeout: Timer = $"State Machine/StunTime"
+var can_dash = true
 var can_attack = true
 var is_dashing = false
+
+
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var animation_tree: AnimationTree = $AnimationTree
+var animation_state
+
+
+
+
 var last_hit_direction: Vector3 = Vector3.ZERO
 var last_damage: int
 var player_inventory: PlayerInventory
@@ -36,8 +45,8 @@ func _enter_tree():
 		set_multiplayer_authority(id)
 
 func _ready():
-	animationTree.active = true
-	animationState = animationTree.get("parameters/playback")
+	animation_tree.active = true
+	animation_state = animation_tree.get("parameters/playback")
 	var is_local_player = is_multiplayer_authority()
 	var local_client_id = multiplayer.get_unique_id()
 
@@ -59,9 +68,11 @@ func _check_fall_and_respawn():
 	if global_transform.origin.y < -15.0:
 		take_damage(20, null)
 		_respawn()
-
+func get_spawn_point() -> Vector3:
+	var spawn_point = Vector2.from_angle(randf() * 2 * PI) * 10 # spawn radius
+	return Vector3(spawn_point.x, 2, spawn_point.y)
 func _respawn():
-	global_transform.origin = Vector3(0.0, 10.0, 0.0)
+	global_transform.origin = get_spawn_point()
 	velocity = Vector3.ZERO
 
 func _physics_process(_delta: float) -> void:
@@ -70,12 +81,12 @@ func _physics_process(_delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if not is_multiplayer_authority():
 		return
-	if stateMachine.currentState.name == "PlayerMove":
+	if state_machine.currentState.name == "PlayerMove":
 		if Input.is_action_just_pressed("attack") and can_attack:
-			stateMachine.transition_to(stateMachine.currentState.name, "PlayerCharge")
+			state_machine.transition_to(state_machine.currentState.name, "PlayerCharge")
 			return
-		if Input.is_action_just_pressed("dash") and canDash and can_attack:
-			stateMachine.transition_to(stateMachine.currentState.name, "PlayerDash")
+		if Input.is_action_just_pressed("dash") and can_dash and can_attack:
+			state_machine.transition_to(state_machine.currentState.name, "PlayerDash")
 	if event.is_action_pressed("escape"):
 		get_tree().quit()
 	if event is InputEventMouseMotion:
@@ -95,13 +106,13 @@ func death():
 	request_death.rpc()
 	_respawn()
 func _on_dash_timeout_timeout() -> void:
-	canDash = true
+	can_dash = true
 
 func _on_attack_timeout_timeout() -> void:
 	can_attack = true
 
 func change_anim_state(state_name: String):
-		animationState.travel(state_name)
+		animation_state.travel(state_name)
 
 # Health Network Funtions - Server authorative, client-specific
 @rpc ("any_peer","call_local", "reliable")
@@ -130,7 +141,7 @@ func sync_health_to_owner(new_health: int, direction, amount):
 	if is_multiplayer_authority():
 		if direction != null:
 			last_hit_direction = direction
-		stateMachine.transition_to(stateMachine.currentState.name, "PlayerKnockback")
+		state_machine.transition_to(state_machine.currentState.name, "PlayerKnockback")
 		if amount != null:
 			last_damage = amount
 		HEALTH = new_health

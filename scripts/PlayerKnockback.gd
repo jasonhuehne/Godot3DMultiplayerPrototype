@@ -7,7 +7,7 @@ var timer_started = false
 
 func enter():
 	if player:
-		player.animationTree["parameters/conditions/hit"] = true
+		player.animation_tree["parameters/conditions/hit"] = true
 	print_debug("PlayerKnockback")
 	player.set_collision_layer_value(1, false)
 	timer_started = false
@@ -18,9 +18,9 @@ func enter():
 		knockback_force = 15
 	player.velocity = direction * knockback_force
 func exit():
-	player.animationTree["parameters/conditions/hit"] = false
+	player.animation_tree["parameters/conditions/hit"] = false
 	player.set_collision_layer_value(1, true)
-	player.stunTimeout.stop()
+	player.stun_timeout.stop()
 func physics_update(delta: float) -> void:
 	player.velocity = player.velocity.move_toward(Vector3.ZERO, friction * delta)
 	if not player.is_on_floor():
@@ -31,7 +31,7 @@ func _on_stun_time_timeout() -> void:
 	var input_dir := Input.get_vector("left", "right", "forward", "backward")
 	if Input.is_action_pressed("attack") and player.can_attack:
 		Transitioned.emit(self, "PlayerCharge")
-	elif Input.is_action_just_pressed("dash") and player.canDash:
+	elif Input.is_action_just_pressed("dash") and player.can_dash:
 		Transitioned.emit(self, "PlayerDash")	
 	elif not input_dir == Vector2.ZERO:
 		Transitioned.emit(self, "PlayerMove")
@@ -40,4 +40,4 @@ func _on_stun_time_timeout() -> void:
 
 func _on_animation_tree_animation_finished(anim_name: StringName) -> void:
 	if anim_name == "knockback":
-		player.stunTimeout.start()	
+		player.stun_timeout.start()	
