@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=4 uid="uid://bl0wx6gnt5d6n"]
+[gd_scene load_steps=49 format=4 uid="uid://bl0wx6gnt5d6n"]
 
 [ext_resource type="Script" uid="uid://b43shnt5y151p" path="res://scripts/enemy.gd" id="1_b6abq"]
 [ext_resource type="PackedScene" uid="uid://c2sqtgmg7kfx0" path="res://scenes/level/sub_viewport.tscn" id="2_6rhmk"]
@@ -68,10 +68,10 @@ point_count = 2
 properties/0/path = NodePath(".:transform")
 properties/0/spawn = true
 properties/0/replication_mode = 1
-properties/1/path = NodePath("AnimationPlayer:current_animation")
+properties/1/path = NodePath("SubViewport/Healthbar3D:value")
 properties/1/spawn = true
-properties/1/replication_mode = 2
-properties/2/path = NodePath("SubViewport/Healthbar3D:value")
+properties/1/replication_mode = 1
+properties/2/path = NodePath("State Machine:currentState_name")
 properties/2/spawn = true
 properties/2/replication_mode = 1
 
@@ -152,6 +152,54 @@ tracks/5/keys = {
 "update": 0,
 "values": [Color(0.2520276, 0.25202766, 0.25202763, 1)]
 }
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Sprite3D:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Pivot/Character:position")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Pivot/Character:scale")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Pivot/Character:rotation")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_6rhmk"]
 resource_name = "attack"
@@ -166,7 +214,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.33333334, 0.6333333, 1.2666667),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Vector3(0.7016195, 1.4226631, -0.70394063), Vector3(1.0934374, 1.7284436, -0.9928206), Vector3(-1.0914035, 1.4226631, -1.5595646), Vector3(0.7016195, 1.4226631, -0.70394063)]
+"values": [Vector3(0.7016195, 1.4226631, -0.70394063), Vector3(1.0934374, 1.7284436, -0.9928206), Vector3(-1.091, 1.158, -1.56), Vector3(0.7016195, 1.4226631, -0.70394063)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -256,17 +304,192 @@ tracks/4/keys = {
 "update": 0,
 "values": [Color(0.2520276, 0.25202766, 0.25202763, 1), Color(2.454227, 0, 2.4145863, 1), Color(1, 0, 0.9833331, 1), Color(0.2520276, 0.25202766, 0.25202763, 1)]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Sprite3D:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="Animation" id="Animation_fybf7"]
+resource_name = "move"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pivot/Character:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.46666667, 1),
+"transitions": PackedFloat32Array(1, 1.681794, 0.5547855),
+"update": 0,
+"values": [Vector3(-2.0262385e-10, 0, 2.3283064e-10), Vector3(-2.0262385e-10, 0.087111354, 2.3283064e-10), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_mus8u"]
+resource_name = "knockback"
+length = 0.33
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pivot/Character:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.21, 0.32),
+"transitions": PackedFloat32Array(1, 0.46651652, 1, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(1, 0.9, 1), Vector3(1, 1.05, 1), Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_5wy16"]
+resource_name = "chase"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pivot/Character:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.46666667, 1),
+"transitions": PackedFloat32Array(1, 1.681794, 0.5547855),
+"update": 0,
+"values": [Vector3(-2.0262385e-10, 0, 2.3283064e-10), Vector3(-2.0262385e-10, 0.087111354, 2.3283064e-10), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_h8nul"]
+resource_name = "idle"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pivot/Character:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 6.2831855, 0)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_yky5o"]
 _data = {
 &"RESET": SubResource("Animation_scy4r"),
 &"attack": SubResource("Animation_6rhmk"),
-&"jumpAttack": SubResource("Animation_yky5o")
+&"chase": SubResource("Animation_5wy16"),
+&"idle": SubResource("Animation_h8nul"),
+&"jumpAttack": SubResource("Animation_yky5o"),
+&"knockback": SubResource("Animation_mus8u"),
+&"move": SubResource("Animation_fybf7")
 }
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6rhmk"]
+animation = &"attack"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_scy4r"]
+animation = &"chase"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_yky5o"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_fybf7"]
+animation = &"jumpAttack"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5wy16"]
+animation = &"knockback"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_mus8u"]
+animation = &"move"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_5wy16"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_h8nul"]
+advance_mode = 2
+advance_condition = &"player_in_range"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_1xh5j"]
+advance_mode = 2
+advance_condition = &"player_in_attackrange"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_vrcgx"]
+advance_mode = 2
+advance_condition = &"no_player_in_attackrange"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_j4e17"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_0qbcg"]
+switch_mode = 2
+advance_mode = 2
+advance_condition = &"player_in_range"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_gq0a7"]
+xfade_time = 0.1
+break_loop_at_end = true
+advance_mode = 2
+advance_condition = &"hit"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_v7d3m"]
+advance_mode = 2
+advance_condition = &"no_player_in_range"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ixlhr"]
+advance_mode = 2
+advance_condition = &"no_player_in_range"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_5ex0u"]
+advance_mode = 2
+advance_condition = &"player_in_range"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_6rhmk"]
+switch_mode = 2
+advance_mode = 2
+advance_condition = &"player_in_range"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_yky5o"]
+switch_mode = 2
+advance_mode = 2
+advance_condition = &"no_player_in_range"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_scy4r"]
+xfade_time = 0.17
+advance_mode = 2
+advance_condition = &"hit"
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_h8nul"]
+states/Start/position = Vector2(96, 100)
+states/attack/node = SubResource("AnimationNodeAnimation_6rhmk")
+states/attack/position = Vector2(703, 93)
+states/chase/node = SubResource("AnimationNodeAnimation_scy4r")
+states/chase/position = Vector2(477, 111)
+states/idle/node = SubResource("AnimationNodeAnimation_yky5o")
+states/idle/position = Vector2(255, 111)
+states/jumpAttack/node = SubResource("AnimationNodeAnimation_fybf7")
+states/jumpAttack/position = Vector2(309, 193)
+states/knockback/node = SubResource("AnimationNodeAnimation_5wy16")
+states/knockback/position = Vector2(590, 311)
+states/move/node = SubResource("AnimationNodeAnimation_mus8u")
+states/move/position = Vector2(452, 254)
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_5wy16"), "idle", "chase", SubResource("AnimationNodeStateMachineTransition_h8nul"), "chase", "attack", SubResource("AnimationNodeStateMachineTransition_1xh5j"), "chase", "jumpAttack", SubResource("AnimationNodeStateMachineTransition_vrcgx"), "attack", "chase", SubResource("AnimationNodeStateMachineTransition_j4e17"), "jumpAttack", "chase", SubResource("AnimationNodeStateMachineTransition_0qbcg"), "chase", "knockback", SubResource("AnimationNodeStateMachineTransition_gq0a7"), "chase", "move", SubResource("AnimationNodeStateMachineTransition_v7d3m"), "jumpAttack", "move", SubResource("AnimationNodeStateMachineTransition_ixlhr"), "move", "chase", SubResource("AnimationNodeStateMachineTransition_5ex0u"), "knockback", "chase", SubResource("AnimationNodeStateMachineTransition_6rhmk"), "knockback", "move", SubResource("AnimationNodeStateMachineTransition_yky5o"), "attack", "knockback", SubResource("AnimationNodeStateMachineTransition_scy4r")]
+graph_offset = Vector2(177, 67)
 
 [node name="enemy" type="CharacterBody3D" groups=["enemies"]]
 collision_layer = 13
 collision_mask = 15
+axis_lock_angular_y = true
+axis_lock_angular_z = true
 script = ExtResource("1_b6abq")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
@@ -277,7 +500,7 @@ texture = SubResource("ViewportTexture_scy4r")
 [node name="SubViewport" parent="." instance=ExtResource("2_6rhmk")]
 
 [node name="Weapon" type="Node3D" parent="."]
-transform = Transform3D(0.9862468, 0.079384744, -0.14495893, -0.05536136, 0.9850996, 0.16281927, 0.15572442, -0.15255468, 0.9759496, 0.7016195, 1.4226631, -0.70394063)
+transform = Transform3D(0.98624676, 0.07938474, -0.14495893, -0.055361357, 0.9850995, 0.16281927, 0.1557244, -0.15255466, 0.9759496, 0.7016195, 1.4226631, -0.70394063)
 rotation_order = 0
 
 [node name="Mesh" type="MeshInstance3D" parent="Weapon"]
@@ -352,6 +575,7 @@ one_shot = true
 script = ExtResource("10_5ndxr")
 
 [node name="ActionTimeout" type="Timer" parent="State Machine/EnemyChase"]
+wait_time = 4.0
 one_shot = true
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
@@ -365,9 +589,19 @@ collision_mask = 3
 shape = SubResource("CylinderShape3D_kvuuh")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+deterministic = true
 libraries = {
 &"": SubResource("AnimationLibrary_yky5o")
 }
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeStateMachine_h8nul")
+anim_player = NodePath("../AnimationPlayer")
+parameters/conditions/hit = false
+parameters/conditions/no_player_in_attackrange = false
+parameters/conditions/no_player_in_range = false
+parameters/conditions/player_in_attackrange = false
+parameters/conditions/player_in_range = true
 
 [connection signal="body_entered" from="Weapon/Hitbox" to="State Machine/EnemyMeleeAttack" method="_on_hitbox_body_entered"]
 [connection signal="timeout" from="State Machine/EnemyMove/HealTimer" to="State Machine/EnemyMove" method="_on_heal_timer_timeout"]
@@ -378,5 +612,6 @@ libraries = {
 [connection signal="timeout" from="State Machine/EnemyChase/ActionTimeout" to="State Machine/EnemyChase" method="_on_action_timeout_timeout"]
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
 [connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]
-[connection signal="animation_finished" from="AnimationPlayer" to="State Machine/EnemyJumpAttack" method="_on_animation_player_animation_finished"]
-[connection signal="animation_finished" from="AnimationPlayer" to="State Machine/EnemyMeleeAttack" method="_on_animation_player_animation_finished"]
+[connection signal="animation_finished" from="AnimationTree" to="State Machine/EnemyJumpAttack" method="_on_animation_tree_animation_finished"]
+[connection signal="animation_finished" from="AnimationTree" to="State Machine/EnemyMeleeAttack" method="_on_animation_tree_animation_finished"]
+[connection signal="animation_finished" from="AnimationTree" to="State Machine/EnemyKnockback" method="_on_animation_tree_animation_finished"]

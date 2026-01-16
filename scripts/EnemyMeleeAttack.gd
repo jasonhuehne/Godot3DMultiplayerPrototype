@@ -2,11 +2,13 @@ extends EnemyState
 class_name EnemyMeleeAttack
 
 func enter():
-	enemy.animation_player.play("attack")
+	if enemy:
+		enemy.animation_tree["parameters/conditions/player_in_attackrange"] = true
 	print_debug(self)
 
 func exit():
-	return
+	enemy.animation_tree["parameters/conditions/player_in_attackrange"] = false
+
 
 func physics_update(_delta: float) -> void:
 	if not is_multiplayer_authority():
@@ -22,8 +24,7 @@ func _on_hitbox_body_entered(body: Node3D) -> void:
 	if body is Character:
 		body.take_damage.rpc(20, -enemy.global_transform.basis.z) #player.gd
 
-
-func _on_animation_player_animation_finished(anim_name: StringName) -> void:
+func _on_animation_tree_animation_finished(anim_name: StringName) -> void:
 	if not is_multiplayer_authority():
 		return
 	if anim_name == "attack":

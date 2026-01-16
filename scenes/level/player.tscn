@@ -36,7 +36,7 @@ properties/2/spawn = true
 properties/2/replication_mode = 1
 properties/3/path = NodePath("State Machine:currentState_name")
 properties/3/spawn = true
-properties/3/replication_mode = 1
+properties/3/replication_mode = 2
 
 [sub_resource type="Animation" id="Animation_d2uvk"]
 length = 0.001
@@ -480,7 +480,7 @@ states/knockback/position = Vector2(413, 338)
 states/move/node = SubResource("AnimationNodeAnimation_bkbtv")
 states/move/position = Vector2(320, 4)
 transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_n3wk0"), "idle", "dash", SubResource("AnimationNodeStateMachineTransition_0potc"), "dash", "idle", SubResource("AnimationNodeStateMachineTransition_qce6l"), "idle", "move", SubResource("AnimationNodeStateMachineTransition_lm846"), "move", "idle", SubResource("AnimationNodeStateMachineTransition_mswon"), "move", "dash", SubResource("AnimationNodeStateMachineTransition_454a0"), "dash", "move", SubResource("AnimationNodeStateMachineTransition_fesw4"), "move", "knockback", SubResource("AnimationNodeStateMachineTransition_bfcyu"), "idle", "knockback", SubResource("AnimationNodeStateMachineTransition_4xdeo"), "knockback", "move", SubResource("AnimationNodeStateMachineTransition_c6b0m"), "knockback", "idle", SubResource("AnimationNodeStateMachineTransition_jwk5v"), "attack", "move", SubResource("AnimationNodeStateMachineTransition_ypepm"), "attack", "knockback", SubResource("AnimationNodeStateMachineTransition_jpdyr"), "charged", "attack", SubResource("AnimationNodeStateMachineTransition_wj53m"), "charged", "knockback", SubResource("AnimationNodeStateMachineTransition_qhbr1"), "charge", "charged", SubResource("AnimationNodeStateMachineTransition_xgf8p"), "move", "charge", SubResource("AnimationNodeStateMachineTransition_hbshb"), "charge", "knockback", SubResource("AnimationNodeStateMachineTransition_60h7d"), "idle", "charge", SubResource("AnimationNodeStateMachineTransition_jn51r"), "attack", "idle", SubResource("AnimationNodeStateMachineTransition_bkbtv"), "charge", "attack", SubResource("AnimationNodeStateMachineTransition_a6urh"), "knockback", "charge", SubResource("AnimationNodeStateMachineTransition_j1grs")]
-graph_offset = Vector2(-102, 105)
+graph_offset = Vector2(-124, -158)
 
 [node name="Player" type="CharacterBody3D" groups=["player"]]
 collision_layer = 27

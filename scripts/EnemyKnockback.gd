@@ -8,6 +8,8 @@ var positionIndex: int
 @export var knockback_curve: Curve
 
 func enter():
+	if enemy:
+		enemy.animation_tree["parameters/conditions/hit"] = true
 	timer_started = false
 	var direction = enemy.last_hit_direction
 	if direction == Vector3.ZERO:
@@ -19,19 +21,17 @@ func enter():
 		knockback_force = 10*curve_value
 	enemy.velocity = direction * knockback_force
 func exit():
-	enemy.stun_timeout.stop()
+	enemy.animation_tree["parameters/conditions/hit"] = false
 func physics_update(delta: float) -> void:
 	enemy.velocity = enemy.velocity.move_toward(Vector3.ZERO, friction * delta)
 	
 	enemy.move_and_slide()
-	
-	if enemy.velocity.length() < 0.1:
-		if not timer_started:
-			timer_started = true
-			enemy.stun_timeout.start()		
 
-func _on_stun_time_timeout() -> void:
-	if enemy.aggressive:
-		Transitioned.emit(self, "EnemyChase")
-	else:
-		Transitioned.emit(self, "EnemyMove")
+
+
+func _on_animation_tree_animation_finished(anim_name: StringName) -> void:
+	if anim_name == "knockback":
+		if enemy.aggressive:
+			Transitioned.emit(self, "EnemyChase")
+		else:
+			Transitioned.emit(self, "EnemyMove")
