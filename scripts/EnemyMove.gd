@@ -2,17 +2,13 @@ extends EnemyState
 class_name EnemyMove
 var waited = false
 func enter():
-	if enemy:
-		enemy.animation_tree["parameters/conditions/no_player_in_range"] = true
-		enemy.animation_tree["parameters/conditions/player_in_range"] = false
-		enemy.aggressive = false
-		enemy.set_new_position()
+	enemy.aggressive = false
+	enemy.set_new_position()
 	print_debug(self)
 	return
 
 func exit():
-	enemy.animation_tree["parameters/conditions/no_player_in_range"] = false
-
+	return
 func physics_update(delta: float) -> void:
 
 	if enemy.navigation_agent_3d.is_navigation_finished():

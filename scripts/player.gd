@@ -65,10 +65,9 @@ func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _check_fall_and_respawn():
-	if global_transform.origin.y < -20.0:
-		take_damage.rpc(20, null)
+	if global_transform.origin.y < -15.0:
+		take_damage(20, null)
 		_respawn()
-
 func get_spawn_point() -> Vector3:
 	var spawn_point = Vector2.from_angle(randf() * 2 * PI) * 10 # spawn radius
 	return Vector3(spawn_point.x, 2, spawn_point.y)
@@ -116,7 +115,7 @@ func change_anim_state(state_name: String):
 		animation_state.travel(state_name)
 
 # Health Network Funtions - Server authorative, client-specific
-@rpc ("any_peer","call_local", "reliable", 0)
+@rpc ("any_peer","call_local", "reliable")
 func take_damage(DAMAGE, knockback_direction) -> void:
 	if not multiplayer.is_server():
 		return
@@ -126,7 +125,7 @@ func take_damage(DAMAGE, knockback_direction) -> void:
 	var owner_id = get_multiplayer_authority()
 	sync_health_to_owner.rpc_id(owner_id, HEALTH, knockback_direction, DAMAGE)
 
-@rpc ("any_peer","call_local", "reliable", 1)
+@rpc ("any_peer","call_local", "reliable")
 func request_death() -> void:
 	if not multiplayer.is_server():
 		return
@@ -134,7 +133,7 @@ func request_death() -> void:
 	var owner_id = get_multiplayer_authority()
 	sync_health_to_owner.rpc_id(owner_id, HEALTH, null, null)
 	
-@rpc("any_peer", "call_local", "reliable", 1)
+@rpc("any_peer", "call_local", "reliable")
 func sync_health_to_owner(new_health: int, direction, amount):
 	if multiplayer.get_remote_sender_id() != 1:
 		print_debug("Wrong sender of Health Sync")

@@ -7,8 +7,7 @@ var currentState : State
 			currentState_name = value
 			return
 		currentState_name = value
-		if is_node_ready():
-			_on_sync_state_changed(value)
+		_on_sync_state_changed(value)
 var states: Dictionary = {}
 
 func _ready():

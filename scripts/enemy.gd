@@ -47,7 +47,6 @@ var shockwave_scene = preload("res://scenes/level/shockwave.tscn")
 @onready var stun_timeout = $"State Machine/EnemyKnockback/StunTime"
 @onready var state_machine = $"State Machine"
 @onready var animation_player = $AnimationPlayer
-@onready var animation_tree = $AnimationTree
 @onready var players_container = get_node("/root/Level/PlayersContainer")
 @onready var healtBar = $SubViewport/Healthbar3D
 
@@ -94,7 +93,7 @@ func spawn_shockwave():
 	
 	_spawn_vfx()
 
-@rpc("authority", "call_remote", "reliable", 2)
+@rpc("authority", "call_remote", "reliable")
 func spawn_shockwave_on_clients():
 	_spawn_vfx()
 
@@ -109,7 +108,7 @@ func _spawn_vfx():
 	
 
 #Take Damage
-@rpc("any_peer", "call_local", "reliable", 0)
+@rpc("any_peer", "call_local", "reliable")
 func take_damage(damage, hit_direction):
 	if not is_multiplayer_authority():
 		return
