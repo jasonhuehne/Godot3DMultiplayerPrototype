@@ -588,7 +588,6 @@ transform = Transform3D(1, 0, -1.7484555e-07, 0, 1, 0, 1.7484555e-07, 0, 1, 0, 2
 
 [node name="Nickname" type="Label3D" parent="PlayerNick"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.28502512, 0)
-visible = false
 text = "test_name"
 
 [connection signal="body_entered" from="Head/WeaponManager/Weapon/Hitbox" to="State Machine/PlayerAttack" method="_on_hitbox_body_entered"]
