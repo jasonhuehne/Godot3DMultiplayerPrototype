@@ -3,10 +3,10 @@ class_name PlayerDash
 
 func enter():
 	player.animation_tree["parameters/conditions/dashing"] = true
-	player.dash_timeout.start()
 	print_debug(self)
 	player.set_collision_layer_value(5, false)
 	player.can_dash = false
+	player.dash_timeout.start()
 	var input_dir := Input.get_vector("left", "right", "forward", "backward")
 	var direction = (player.head.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:

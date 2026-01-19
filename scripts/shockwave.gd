@@ -85,4 +85,4 @@ func check_for_damage(thickness):
 			if distance >= hit_zone_inner and distance <= hit_zone_outer:
 				bodies_hit.append(body)
 				if body.has_method("take_damage"):
-					body.take_damage(damage,  knockback_direction)
+					body.take_damage.rpc(damage,  knockback_direction)

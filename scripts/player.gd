@@ -82,10 +82,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not is_multiplayer_authority():
 		return
 	if state_machine.currentState.name == "PlayerMove":
-		if Input.is_action_just_pressed("attack") and can_attack:
+		if event.is_action_pressed("attack") and can_attack:
 			state_machine.transition_to(state_machine.currentState.name, "PlayerCharge")
 			return
-		if Input.is_action_just_pressed("dash") and can_dash and can_attack:
+		elif event.is_action_pressed("dash") and can_dash and can_attack:
 			state_machine.transition_to(state_machine.currentState.name, "PlayerDash")
 	if event.is_action_pressed("escape"):
 		get_tree().quit()
@@ -105,6 +105,7 @@ func death():
 	_current_speed = 0
 	request_death.rpc()
 	_respawn()
+	
 func _on_dash_timeout_timeout() -> void:
 	can_dash = true
 
@@ -115,7 +116,7 @@ func change_anim_state(state_name: String):
 		animation_state.travel(state_name)
 
 # Health Network Funtions - Server authorative, client-specific
-@rpc ("any_peer","call_local", "reliable")
+@rpc ("any_peer","call_local", "reliable", 0)
 func take_damage(DAMAGE, knockback_direction) -> void:
 	if not multiplayer.is_server():
 		return
@@ -125,7 +126,7 @@ func take_damage(DAMAGE, knockback_direction) -> void:
 	var owner_id = get_multiplayer_authority()
 	sync_health_to_owner.rpc_id(owner_id, HEALTH, knockback_direction, DAMAGE)
 
-@rpc ("any_peer","call_local", "reliable")
+@rpc ("any_peer","call_local", "reliable", 1)
 func request_death() -> void:
 	if not multiplayer.is_server():
 		return
@@ -133,7 +134,7 @@ func request_death() -> void:
 	var owner_id = get_multiplayer_authority()
 	sync_health_to_owner.rpc_id(owner_id, HEALTH, null, null)
 	
-@rpc("any_peer", "call_local", "reliable")
+@rpc("any_peer", "call_local", "reliable", 1)
 func sync_health_to_owner(new_health: int, direction, amount):
 	if multiplayer.get_remote_sender_id() != 1:
 		print_debug("Wrong sender of Health Sync")

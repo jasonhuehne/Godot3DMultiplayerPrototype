@@ -14,12 +14,12 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 [application]
 
-config/name="TemplateOnlineMultiplayer"
-config/description="This is a foundational template for a 3D multiplayer game, developed in Godot Engine."
+config/name="MultiplayerBossFightPrototype"
+config/description="This is a prototype for my bachelor thesis"
 config/tags=PackedStringArray("3d", "network")
 run/main_scene="res://scenes/level/level.tscn"
 config/features=PackedStringArray("4.5", "Forward Plus")
-config/icon="res://icon.png"
+config/icon="uid://dil3ajn1rj052"
 
 [autoload]
 

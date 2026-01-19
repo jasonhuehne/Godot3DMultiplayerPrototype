@@ -9,7 +9,7 @@ extends Node3D
 @onready var waypoints = $Waypoints.find_children("WaypointMarker*")
 @onready var health_bar = $HealthBar
 @onready var currencyLabel = $Currency
-var currency: int = 0
+@export var currency: int = 0
 var waypointPositions: Array = []
 var mob_scene = preload("res://scenes/level/enemy.tscn")
 var enemies  = []
@@ -17,7 +17,7 @@ var chat_visible = false
 var inventory_visible = false
 var healthBar_visible = false
 func _ready():
-	sync_currency()
+	sync_currency(currency)
 	multiplayer_chat.hide()
 	main_menu.show_menu()
 	multiplayer_chat.set_process_input(true)
@@ -77,7 +77,7 @@ func _spawnmob():
 
 func _on_mob_death():
 	currency += 100
-	sync_currency()
+	sync_currency.rpc(currency)
 
 func get_spawn_point() -> Vector3:
 	var spawn_point = Vector2.from_angle(randf() * 2 * PI) * 10 # spawn radius
@@ -109,8 +109,7 @@ func _on_player_health_changed(new_health, owner_id):
 			var player = players_container.get_node(str(owner_id))
 			player.death()
 			currency -= 50
-			sync_currency()
-
+			sync_currency.rpc(currency)
 			if not multiplayer.is_server():
 				return
 			for mob in mobs_container.get_children():
@@ -119,9 +118,10 @@ func _on_player_health_changed(new_health, owner_id):
 					player_data.damage_dealt = 0
 					mob._recalculate_aggro()
 
-func sync_currency():
-	str(currency)
-	currencyLabel.text = "Punkte: " + str(currency)
+@rpc ("authority", "call_local", "reliable",1)
+func sync_currency(new_amount: int):
+	currency = new_amount
+	currencyLabel.text = "Punkte: " + str(new_amount)
 # ---------- MULTIPLAYER CHAT ----------
 func toggle_chat():
 	if main_menu.is_menu_visible():

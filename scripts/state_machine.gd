@@ -24,10 +24,11 @@ func _ready():
 		currentState = initial_state
 func _physics_process(delta: float) -> void:
 	if currentState:
-		currentState.update(delta)
+		currentState.physics_update(delta)
+
 func _process(delta: float) -> void:
 	if currentState:
-		currentState.physics_update(delta)
+		currentState.update(delta)
 func transition_to(state, new_state_name: String):
 	if state != currentState.name:
 		return
