@@ -65,9 +65,15 @@ func _add_player(id: int, player_info : Dictionary):
 	#player.set_player_skin(skin_enum)
 
 func _spawnmob():
-	print_debug("spawnmob")
 	if not multiplayer.is_server():
 		return
+	health_bar.visible = false
+	if players_container.has_node("1"):
+		var host_player = players_container.get_node("1")
+		host_player.spectate()
+	if not multiplayer.is_server():
+		return
+	print_debug("spawnmob")
 	var mob = mob_scene.instantiate()
 	mob.position = get_spawn_point()
 	mob.waypointPositions = waypointPositions
@@ -103,13 +109,10 @@ func setup_healthbar(player: Character):
 func _on_player_health_changed(new_health, owner_id):
 	health_bar.value = new_health
 
-	if new_health <= 0:
-		print_debug(owner_id, "died")
+	if new_health <= 1:
 		if players_container.has_node(str(owner_id)):
 			var player = players_container.get_node(str(owner_id))
 			player.death()
-			currency -= 50
-			sync_currency.rpc(currency)
 			if not multiplayer.is_server():
 				return
 			for mob in mobs_container.get_children():

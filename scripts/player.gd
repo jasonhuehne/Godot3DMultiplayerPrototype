@@ -15,6 +15,7 @@ var _current_speed: float
 @onready var head = $Head
 @onready var body: MeshInstance3D = $MeshInstance3D
 @onready var body_collider: CollisionShape3D = $CollisionShape3D
+@onready var weapon: Node3D = $Head/WeaponManager
 @onready var nickname: Label3D = $PlayerNick/Nickname
 @onready var camera: Node3D = $Head/Camera3D
 
@@ -78,10 +79,16 @@ func _respawn():
 func _physics_process(_delta: float) -> void:
 	_check_fall_and_respawn()
 
+func spectate() -> void:
+	if multiplayer.get_unique_id() == 1:
+		state_machine.transition_to(state_machine.currentState.name, "Spectate")
+
 func _unhandled_input(event: InputEvent) -> void:
 	if not is_multiplayer_authority():
 		return
 	if state_machine.currentState.name == "PlayerMove":
+		if event.is_action_pressed("spectate"):
+			spectate()
 		if event.is_action_pressed("attack") and can_attack:
 			state_machine.transition_to(state_machine.currentState.name, "PlayerCharge")
 			return
@@ -99,6 +106,7 @@ func freeze():
 	velocity.x = 0
 	velocity.z = 0
 	_current_speed = 0
+	
 func death():
 	velocity.x = 0
 	velocity.z = 0
@@ -140,9 +148,10 @@ func sync_health_to_owner(new_health: int, direction, amount):
 		print_debug("Wrong sender of Health Sync")
 		return
 	if is_multiplayer_authority():
-		if direction != null:
-			last_hit_direction = direction
-		state_machine.transition_to(state_machine.currentState.name, "PlayerKnockback")
+		if state_machine.currentState.name != "PlayerKnockback":
+			if direction != null:
+				last_hit_direction = direction
+				state_machine.transition_to(state_machine.currentState.name, "PlayerKnockback")
 		if amount != null:
 			last_damage = amount
 		HEALTH = new_health
