@@ -28,6 +28,7 @@ class Player:
 	func _init(_body: Node3D) -> void:
 		body =_body
 		damage_dealt = 0
+var bodies: Array[Player] = []
 var body_map: Dictionary = {}
 
 #JumpAttack
@@ -64,6 +65,7 @@ func _on_area_3d_body_entered(body: Node3D) -> void:
 		else:
 			var new_player = Player.new(body)
 			new_player.is_in_range = true
+			bodies.append(new_player)
 			body_map[player_id] = new_player
 		aggressive = true
 	_recalculate_aggro()
@@ -77,6 +79,7 @@ func _on_area_3d_body_exited(body: Node3D) -> void:
 		if body_map.has(player_id):
 			var player: Player = body_map[player_id]
 			player.is_in_range = false
+	print_debug(bodies)
 
 
 #Shockwave (KI-Unterstützt)
