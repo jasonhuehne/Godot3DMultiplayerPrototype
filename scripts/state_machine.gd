@@ -28,12 +28,10 @@ func _physics_process(delta: float) -> void:
 func _process(delta: float) -> void:
 	if currentState:
 		currentState.update(delta)
-		
 func transition_to(state, new_state_name: String):
 	if state != currentState.name:
 		return
 	on_child_transition(currentState, new_state_name)
-	
 func on_child_transition(state, new_state_name):
 	if state != currentState:
 		return

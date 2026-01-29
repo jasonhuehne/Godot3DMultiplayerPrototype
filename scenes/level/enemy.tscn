@@ -4,9 +4,9 @@
 [ext_resource type="PackedScene" uid="uid://c2sqtgmg7kfx0" path="res://scenes/level/sub_viewport.tscn" id="2_6rhmk"]
 [ext_resource type="PackedScene" uid="uid://dri6cgkssj30u" path="res://assets/characters/enemy/enemy.tscn" id="2_55jtl"]
 [ext_resource type="Material" uid="uid://sc00wpguiij2" path="res://enemy_weapon_material.tres" id="2_57s80"]
+[ext_resource type="Script" uid="uid://bhbspob3tdjx8" path="res://scripts/state_machine.gd" id="3_mpr68"]
 [ext_resource type="Script" uid="uid://cbgree8tm6qap" path="res://scripts/EnemyIdle.gd" id="4_ft8do"]
 [ext_resource type="Script" uid="uid://n2mvibf6hqfn" path="res://scripts/EnemyMove.gd" id="5_5wwv6"]
-[ext_resource type="Script" uid="uid://w4tc7dmfimsy" path="res://scripts/EnemyState.gd" id="5_6rhmk"]
 [ext_resource type="Script" uid="uid://cdnd7i7tvy0m4" path="res://scripts/EnemyJumpAttack.gd" id="6_1vja8"]
 [ext_resource type="Script" uid="uid://mtxgn6t7ph7y" path="res://scripts/EnemyMeleeAttack.gd" id="7_dnbds"]
 [ext_resource type="Script" uid="uid://c5441rw14ths2" path="res://scenes/level/multiplayer_synchronizer.gd" id="7_kvuuh"]
@@ -277,7 +277,7 @@ texture = SubResource("ViewportTexture_scy4r")
 [node name="SubViewport" parent="." instance=ExtResource("2_6rhmk")]
 
 [node name="Weapon" type="Node3D" parent="."]
-transform = Transform3D(0.98624647, 0.07938471, -0.14495893, -0.05536134, 0.9850992, 0.16281927, 0.15572436, -0.1525546, 0.9759496, 0.7016195, 1.4226631, -0.70394063)
+transform = Transform3D(0.9862466, 0.07938472, -0.14495893, -0.05536135, 0.9850993, 0.16281927, 0.15572438, -0.15255462, 0.9759496, 0.7016195, 1.4226631, -0.70394063)
 rotation_order = 0
 
 [node name="Mesh" type="MeshInstance3D" parent="Weapon"]
@@ -306,8 +306,9 @@ target_position = Vector3(0, 0, -2.5)
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 
-[node name="State Machine" type="Node" parent="."]
-script = ExtResource("5_6rhmk")
+[node name="State Machine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("3_mpr68")
+initial_state = NodePath("EnemyIdle")
 
 [node name="EnemyIdle" type="Node" parent="State Machine"]
 script = ExtResource("4_ft8do")
