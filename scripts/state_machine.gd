@@ -3,10 +3,11 @@ extends Node
 var currentState : State
 @export var currentState_name: String:
 	set(value):
+		if is_multiplayer_authority():
+			currentState_name = value
+			return
 		currentState_name = value
-		if not is_multiplayer_authority():
-			_on_sync_state_changed(value)
-
+		_on_sync_state_changed(value)
 var states: Dictionary = {}
 
 func _ready():
@@ -45,11 +46,11 @@ func on_child_transition(state, new_state_name):
 	currentState_name = new_state_name.to_lower()
 	
 func _on_sync_state_changed(new_node_name: String):
-	if not is_multiplayer_authority():
-		var new_state = states.get(new_node_name.to_lower())
-		if new_state == currentState:
-			return
-		if new_state:
-			if currentState: currentState.exit()
-			new_state.enter()
-			currentState = new_state
+
+	var new_state = states.get(new_node_name.to_lower())
+	if new_state == currentState:
+		return
+	if new_state:
+		if currentState: currentState.exit()
+		new_state.enter()
+		currentState = new_state

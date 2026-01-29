@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://u2f1js3kjrdi"]
+[gd_scene load_steps=55 format=3 uid="uid://u2f1js3kjrdi"]
 
 [ext_resource type="Script" uid="uid://c2si8gkbnde0c" path="res://scripts/player.gd" id="1_cw2d6"]
 [ext_resource type="ArrayMesh" uid="uid://cvyxyp5gg6qjb" path="res://assets/model/Character.obj" id="2_v6fml"]
@@ -11,7 +11,6 @@
 [ext_resource type="Script" uid="uid://b17atnpgnwsg3" path="res://scripts/PlayerAttack.gd" id="9_pnmcy"]
 [ext_resource type="Script" uid="uid://dq5odkj7pim62" path="res://scripts/PlayerCharge.gd" id="11_jn51r"]
 [ext_resource type="Script" uid="uid://egd3dtgjgp28" path="res://scripts/PlayerCharged.gd" id="12_bkbtv"]
-[ext_resource type="Script" uid="uid://bls16tieu1ak1" path="res://scripts/Spectate.gd" id="12_jn51r"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rtsbg"]
 radius = 0.6538086
@@ -553,10 +552,6 @@ script = ExtResource("11_jn51r")
 
 [node name="PlayerCharged" type="Node" parent="State Machine"]
 script = ExtResource("12_bkbtv")
-
-[node name="Spectate" type="Node" parent="State Machine"]
-script = ExtResource("12_jn51r")
-metadata/_custom_type_script = "uid://bls16tieu1ak1"
 
 [node name="ChargeTime" type="Timer" parent="State Machine"]
 wait_time = 1.5
