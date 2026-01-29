@@ -91,17 +91,13 @@ func spawn_shockwave():
 	
 	rpc("spawn_shockwave_on_clients") 
 	
-	_spawn_vfx()
+	spawn_wave()
 
 @rpc("authority", "call_remote", "reliable")
 func spawn_shockwave_on_clients():
-	_spawn_vfx()
+	spawn_wave()
 
-func _spawn_vfx():
-	print_debug("VFX wird gespawnt auf: ", multiplayer.get_unique_id())
-	if not shockwave_scene:
-		print_debug("Shockwave-Szene ist nicht geladen!")
-		return
+func spawn_wave():
 	var shockwave_instance = shockwave_scene.instantiate()
 	get_tree().get_root().add_child(shockwave_instance)
 	shockwave_instance.global_position = self.global_position
@@ -126,7 +122,6 @@ func take_damage(damage, hit_direction):
 		player_data.damage_dealt += damage
 		print_debug(attacker_id, " hat ", player_data.damage_dealt ," Schaden erzielt")
 		_recalculate_aggro()
-	# Fernangriff noch nicht safe wegen damage ohne Attacker
 	if HEALTH <= 0:
 		death.emit()
 		queue_free()

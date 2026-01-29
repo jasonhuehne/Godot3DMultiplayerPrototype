@@ -44,7 +44,8 @@ func _enter_tree():
 	var id = str(name).to_int()
 	if id > 0:
 		set_multiplayer_authority(id)
-
+	else:
+		set_multiplayer_authority(1)
 func _ready():
 	animation_tree.active = true
 	animation_state = animation_tree.get("parameters/playback")
@@ -129,7 +130,7 @@ func take_damage(DAMAGE, knockback_direction) -> void:
 	if not multiplayer.is_server():
 		return
 
-	HEALTH -= DAMAGE #Wird repliziert von Synchronizer
+	HEALTH -= DAMAGE
 
 	var owner_id = get_multiplayer_authority()
 	sync_health_to_owner.rpc_id(owner_id, HEALTH, knockback_direction, DAMAGE)
@@ -144,16 +145,14 @@ func request_death() -> void:
 	
 @rpc("any_peer", "call_local", "reliable", 1)
 func sync_health_to_owner(new_health: int, direction, amount):
-	if multiplayer.get_remote_sender_id() != 1:
-		print_debug("Wrong sender of Health Sync")
-		return
 	if is_multiplayer_authority():
+		if amount != null:
+			last_damage = amount
 		if state_machine.currentState.name != "PlayerKnockback":
 			if direction != null:
 				last_hit_direction = direction
 				state_machine.transition_to(state_machine.currentState.name, "PlayerKnockback")
-		if amount != null:
-			last_damage = amount
+
 		HEALTH = new_health
 		health_changed.emit(HEALTH, get_multiplayer_authority())
 
