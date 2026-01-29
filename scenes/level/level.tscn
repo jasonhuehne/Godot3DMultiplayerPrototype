@@ -122,3 +122,6 @@ offset_bottom = 38.0
 grow_horizontal = 0
 theme_override_styles/normal = SubResource("StyleBoxFlat_wcngd")
 text = "0000"
+
+[node name="Node3D" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.611286, 8.010193, 9.685746)
