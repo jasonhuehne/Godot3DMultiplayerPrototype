@@ -26,4 +26,3 @@ func physics_update(delta: float) -> void:
 		if player.velocity == Vector3.ZERO and input_dir == Vector2.ZERO:
 			Transitioned.emit(self, "PlayerIdle")
 	player.move_and_slide()
-

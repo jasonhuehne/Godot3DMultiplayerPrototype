@@ -71,8 +71,6 @@ func _spawnmob():
 	if players_container.has_node("1"):
 		var host_player = players_container.get_node("1")
 		host_player.spectate()
-	if not multiplayer.is_server():
-		return
 	print_debug("spawnmob")
 	var mob = mob_scene.instantiate()
 	mob.position = get_spawn_point()
